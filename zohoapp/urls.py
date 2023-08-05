@@ -311,6 +311,7 @@ urlpatterns = [
     path('apr',views.apr,name='apr'),
      
      path('report',views.report_view,name='report'),
+     path('inventory_summary',views.inventory_summary,name='inventory_summary'),
 
 
     

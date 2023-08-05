@@ -6877,3 +6877,6 @@ def payment_delete_details(request):
 
 def report_view(request):
     return render(request,'reports.html')
+
+def inventory_summary(request):
+    return render(request,'inventory_summary.html')
