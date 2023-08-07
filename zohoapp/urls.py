@@ -312,6 +312,10 @@ urlpatterns = [
      
      path('report',views.report_view,name='report'),
      path('inventory_summary',views.inventory_summary,name='inventory_summary'),
+     path('custom_repot',views.custom_repot,name='custom_repot'),
+
+     path('inventory_Valuation_summary',views.inventory_Valuation_summary,name='inventory_Valuation_summary'),
+     path('custom_valuation_repot',views.custom_valuation_repot,name='custom_valuation_repot'),
 
 
     

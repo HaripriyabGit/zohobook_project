@@ -48,7 +48,7 @@ thead {
       
       
         <input type="text" name="usr_in" placeholder="custom">&nbsp&nbsp
-        <i class="fa fa-gear" style="font-size:1.5vw"></i><a href="{% url 'custom_repot' %}">Custom Report</a>
+        <i class="fa fa-gear" style="font-size:1.5vw"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
         
         <i class="fas fa-print " style="color:white; margin-left:650px ;"></i>
         <select name="flter_tp" id="" style="width: 1vw;color:black;" >
@@ -76,10 +76,10 @@ thead {
 
    
         <div class="row">
-           <div style="padding-left: 38%;"><h4>Zylker</h4></div>
+           <div style="padding-left: 40%;"><h4>Zylker</h4></div>
 
-           <div ><a class="text-white" style="font-size: 2rem; padding-left: 30%;white-space: nowrap;">Inventory Summary </a></div>
-                  <div style="padding-left: 35%;"><h5>As of 15 August 2023</h5></div>
+           <div ><a class="text-white" style="font-size: 2rem; padding-left: 26%;white-space: nowrap;">Inventory Valuation Summary </a></div>
+                  <div style="padding-left: 37%;"><h5>As of 15 August 2023</h5></div>
             </div>
         </div>   
     
@@ -88,26 +88,13 @@ thead {
               
                 <table class="table  text-white" id="myTable" style="width: 100%;">
                     <thead>
-                        <tr>
-                            <th colspan="5"></th>
-                            <th colspan="3" style="text-align: center;">STOCK DETAILS</th>
-                         
-                           
-                      
-                          
-                        </tr>
+                       
                       <tr>
                         <th>ITEM NAME</th>
                         <th>SKU</th>
-                     
-                        <th>QUANTITY ORDERED</th>
-                        <th>QUANTITY IN</th>
-                        <th>QUANTITY OUT</th>
-                        
                       
                         <th >STOCK ON HAND</th>
-                        <th>COMMITTED STOCK</th>
-                        <th>AVAILABLE FOR SALE</th>
+                        <th>INVENTORY ASSET VALUE</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -121,10 +108,6 @@ thead {
                         <td></td>
                         <td></td>
 
-                        <td ></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
 
         
                        

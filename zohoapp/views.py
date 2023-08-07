@@ -6880,3 +6880,15 @@ def report_view(request):
 
 def inventory_summary(request):
     return render(request,'inventory_summary.html')
+
+def custom_repot(request):
+    item = AddItem.objects.all()
+    return render(request,'custom_report_inventory.html',{'items':item})
+
+def inventory_Valuation_summary(request):
+    return render(request,'inventory-valuation.html')
+
+
+def custom_valuation_repot(request):
+    item = AddItem.objects.all()
+    return render(request,'custom-valuation-report.html',{'items':item})

@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+   
+    .sidebars {
+       
+       background-color:transparent;
+     margin-top:10% ;  
+     
+    
+        width: 20vw;
+         }
+
+         form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 10px;
+  
+  border-radius: 5px;
+}
+.form-row{
+    display:inline-flex;
+    width:100vw ;
+}
+label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.mt-90{margin-bottom: 90px}
+body
+{
+background: #00B4DB;
+background: -webkit-linear-gradient(to right, #0083B0, #00B4DB);
+background: linear-gradient(to right, #0083B0, #00B4DB);
+
+min-height: 100vh;
+}
+</style>
+<script>
+    $(document).ready(function(){
+    
+    var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+       removeItemButton: true,
+    //    maxItemCount:5,
+          // searchResultLimit:5,
+    //    renderChoiceLimit:5,
+    //    includeSelectAllOption:true
+      }); 
+    
+    
+});
+</script>
+<script>
+    // Function to clear all selections in the multiple select dropdown
+    function clearSelection() {
+        const selectElement = document.getElementById('choices-multiple-remove-button');
+        selectElement.selectedIndex = -1;
+    }
+
+    // Attach a click event to the clearSelectionButton
+    document.getElementById('clearSelectionButton').addEventListener('click', function() {
+        clearSelection();
+    });
+</script>
+<script>
+    function showForm(formId) {
+        // Get all the forms by class name
+        const forms = document.getElementsByTagName("form");
+        
+        // Hide all the forms
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].style.display = "none";
+        }
+        
+        // Show the form corresponding to the formId parameter
+        const selectedForm = document.getElementById(formId);
+        selectedForm.style.display = "block";
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-12 " >
+      <h1 style="position: fixed;top:100px;" >
+        CUSTOMIZE REPORTS
+      
+      
+
+        <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger" style="margin-left:750px ;"> 
+    </h1>
+    </div>
+</div>
+
+<br><br><br><br>
+
+<div class="container">
+    <div class="sidebars">
+        <h4 style="color:  white;position: fixed;"><a href="#"onclick="showForm('form1')" >General</a></h4>
+        <h4 style="color:  white;position: fixed;top:40%"><a href="#" onclick="showForm('form2')">show/hide columns</a></h4>
+        
+    </div>
+    </div>
+
+    <div class="container" style="margin-left:20%; margin-bottom:-20% ;">
+        <form id="form1" class="right-side" method="post" action="" style="width:100vw ;">
+            {% csrf_token %}
+            
+            <div>
+         
+                <label for="" > Item Name</label>&nbsp&nbsp
+                <button style="background-color: transparent; color: white;" id="clearSelectionButton"> clear all</button>
+               
+                <br>
+                 <div class="row d-flex justify-content-left mt-100" style="color: black;">
+                   
+                <select id="choices-multiple-remove-button" placeholder="Click or Type to select" multiple  >
+                
+               
+                    {% for i in items%}
+                    <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
+                    <option class="row d-flex justify-content-left mt-90" >item2<option>
+                 {%endfor%}
+                </select>
+            </div>
+            </div><br><br>
+
+            <div class="form-row">
+             
+            <label for="status" class="form-lable" style="width:20vw ;color: white; ">Status</label>
+            
+            <label for="status" class="form-lable" style="width:20vw ;color: white; margin-left:4.5% ;">Stock Avaliability</label>
+            
+            </div><br>
+            <div class="form-row">
+                <select name="" id="" style="width: 23vw;color: black; height: 7vh;">
+                    <option value="">All</option>
+                    <option value="">Active</option>
+                    <option value="">Inactive</option>
+        
+        
+                </select> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+             
+                <select name="" id="" style="width: 23vw;color: black; height: 7vh;">
+                    <option value="">No criteria</option>
+                    <option value="">Greater than zero</option>
+                    <option value="">Less than or equal to zero</option>
+                    <option value="">Less than zero</option>
+                    <option value=""> Equal to zero</option>
+        
+        
+                </select> 
+                </div><br><br><br>
+           
+            
+                
+                   
+                    <div class="col">
+                        <h4>Advanced Filters</h4>
+                        <p style="white-space: nowrap;font-size: medium;">Use advanance fiter to filter the report based on the field of</p>
+                        <div id="row">
+                            <div class="form-row" style="margin-right:30% ;">
+                                <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                                    {% for i in items%}
+                                    <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
+                                    <option class="row d-flex justify-content-left mt-90" >item2<option>
+                                 {%endfor%}
+                        
+                        
+                                </select>  &nbsp  &nbsp
+                                <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                                    <option value="" hidden>select</option>
+                                    <option value="">is</option>
+                                    <option value="">start with</option>
+                                    <option value="">end with</option>
+                                    <option value=""> contains</option>
+                        
+                        
+                                </select> 
+                                &nbsp  &nbsp
+                               <textarea name="narration" id="" cols="30" rows="2" placeholder="Enter narration" style="height:5vh ;"></textarea>
+
+                               &nbsp
+                               &nbsp
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-danger"
+                                            id="DeleteRow"
+                                            type="button">
+                                        <i class="bi bi-trash"></i>
+                                      
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+     
+                        <div id="newinput"></div>
+                        <button id="rowAdder" type="button" class="btn btn-success">
+                            <span class="bi bi-plus">
+                            </span> Add more
+                        </button>
+                    </div>
+              
+  </form>
+    </div>
+   
+    <script>
+      $(document).ready(function () {
+    
+        function addNewRow() {
+          const newRow = `
+             <br>
+            <div class="form-row">
+                
+              <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                {% for i in items%}
+                <option class="row d-flex justify-content-left mt-90">{{ i.Name }}</option>
+                <option class="row d-flex justify-content-left mt-90">item2</option>
+                {% endfor %}
+              </select>    &nbsp    &nbsp 
+              <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                <option value="" hidden>select</option>
+                <option value="">is</option>
+                <option value="">start with</option>
+                <option value="">end with</option>
+                <option value="">contains</option>
+              </select>
+              &nbsp    &nbsp 
+              <textarea name="narration" id="" cols="30" rows="2" placeholder="Enter narration" style="height:5vh;"></textarea>
+
+
+           
+             &nbsp  
+             <br>
+              <div class="input-group-prepend">
+                <button class="btn btn-danger" id="DeleteRow" type="button">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          $('#newinput').append(newRow);
+        }
+    
+        $('#rowAdder').on('click', function () {
+          addNewRow();
+        });
+    
+        $(document).on('click', '#DeleteRow', function () {
+          $(this).closest('.form-row').remove();
+        });
+      });
+    </script>
+
+    
+
+        
+    {% endblock %}
