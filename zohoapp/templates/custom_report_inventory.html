@@ -67,15 +67,15 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
 
 </script>
 <script>
-  document.getElementById('clearButton').addEventListener('click', function() {
+ function clearAllSelections() {
   var selectElement = document.getElementById("choices-multiple-remove-button");
   var options = selectElement.options;
 
   for (var i = 0; i < options.length; i++) {
     options[i].selected = false;
   }
-});
-</script>
+}
+    </script>
 <div class="row">
     <div class="col-sm-12 " >
       <h1>

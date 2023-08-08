@@ -316,7 +316,8 @@ urlpatterns = [
 
      path('inventory_Valuation_summary',views.inventory_Valuation_summary,name='inventory_Valuation_summary'),
      path('custom_valuation_repot',views.custom_valuation_repot,name='custom_valuation_repot'),
-
+    path('show_hide',views.show_hide,name='show_hide'),
+    path('general',views.general,name='general'),
 
     
     path('add_customers',views.add_customers,name='add_customers'),

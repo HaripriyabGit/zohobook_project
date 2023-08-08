@@ -6892,3 +6892,10 @@ def inventory_Valuation_summary(request):
 def custom_valuation_repot(request):
     item = AddItem.objects.all()
     return render(request,'custom-valuation-report.html',{'items':item})
+
+
+def show_hide(request):
+    return render(request,'show_hide.html')
+
+def general(request):
+    return render(request,'custom-valuation-report.html')

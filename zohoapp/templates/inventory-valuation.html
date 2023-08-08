@@ -2,6 +2,7 @@
 {% block content %}
 {% load static %}
 
+
 <style>
   
 body
@@ -13,9 +14,6 @@ body
 a {
   text-decoration: none;
 }
-
-
-
 
 
 table {
@@ -38,22 +36,29 @@ thead {
 #over:hover {
   background-color: rgba(110, 110, 110, 0.616);
 }
-
+.daterangepicker{
+    color: black;
+  }
 </style>
 
  <br> 
  <div class="row mt-4">
     <div class="col-sm-12">
 
-      
-      
-        <input type="text" name="usr_in" placeholder="custom">&nbsp&nbsp
-        <i class="fa fa-gear" style="font-size:1.5vw"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
+      <div class="b text-black">
+        <div id="reportrange" style="background: white; color: black; cursor: pointer; padding: 5px 10px; border: 1px solid black; height: 4vh; width: 19vw;">
+          <i class="fa fa-calendar"></i>&nbsp;
+          <span></span> <i class="fa fa-caret-down"></i>
+        </div>
+      </div>
+        <i class="fa fa-gear" style="font-size:1.5vw;padding-left:350px ;"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
         
-        <i class="fas fa-print " style="color:white; margin-left:650px ;"></i>
+        <i class="fas fa-print " style="color:white; margin-left:450px ;"></i>
         <select name="flter_tp" id="" style="width: 1vw;color:black;" >
             <option value=""></option>
-            <option value="option" >Print Preference</option>
+            <option value="" ><button>Print Preference</button></option>
+             
+          
           </select>&nbsp&nbsp
         <select name="flter_tp" id="" style="width: 100px; height: 28px;background-color: whitesmoke; padding-left: 2px;">
           <option value="" hidden>Export AS</option>
@@ -131,9 +136,33 @@ thead {
 </div>
 
 
-
-
-
+<script>
+  $(function() {
+  
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+  
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+  
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+  
+    cb(start, end);
+  
+  });
+  </script>
 
 
 {% endblock %}

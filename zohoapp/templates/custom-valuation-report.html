@@ -39,9 +39,12 @@ background: #00B4DB;
 background: -webkit-linear-gradient(to right, #0083B0, #00B4DB);
 background: linear-gradient(to right, #0083B0, #00B4DB);
 
-min-height: 100vh;
 }
+
+
 </style>
+
+<!--this script tag for choosing item in listbox-->
 <script>
     $(document).ready(function(){
     
@@ -56,33 +59,36 @@ min-height: 100vh;
     
 });
 </script>
+<!-- this script tag for clear listbox-->
 <script>
-    // Function to clear all selections in the multiple select dropdown
+   
     function clearSelection() {
         const selectElement = document.getElementById('choices-multiple-remove-button');
         selectElement.selectedIndex = -1;
     }
 
-    // Attach a click event to the clearSelectionButton
     document.getElementById('clearSelectionButton').addEventListener('click', function() {
         clearSelection();
     });
+    
 </script>
+
+<!-- this script tag for show corresponding forms
 <script>
     function showForm(formId) {
-        // Get all the forms by class name
+  
         const forms = document.getElementsByTagName("form");
         
-        // Hide all the forms
+     
         for (let i = 0; i < forms.length; i++) {
             forms[i].style.display = "none";
         }
         
-        // Show the form corresponding to the formId parameter
+    
         const selectedForm = document.getElementById(formId);
         selectedForm.style.display = "block";
     }
-</script>
+</script>-->
 
 <div class="row">
     <div class="col-sm-12 " >
@@ -100,8 +106,8 @@ min-height: 100vh;
 
 <div class="container">
     <div class="sidebars">
-        <h4 style="color:  white;position: fixed;"><a href="#"onclick="showForm('form1')" >General</a></h4>
-        <h4 style="color:  white;position: fixed;top:40%"><a href="#" onclick="showForm('form2')">show/hide columns</a></h4>
+        <h4 style="color:  white;position: fixed;"><a href="#" >General</a></h4>
+        <h4 style="color:  white;position: fixed;top:40%"><a href="{% url 'show_hide' %}">show/hide columns</a></h4>
         
     </div>
     </div>
@@ -164,7 +170,7 @@ min-height: 100vh;
                         <p style="white-space: nowrap;font-size: medium;">Use advanance fiter to filter the report based on the field of</p>
                         <div id="row">
                             <div class="form-row" style="margin-right:30% ;">
-                                <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                                <select name="" id=" firstitem" style="width: 15vw;color: black; height: 5vh;">
                                     {% for i in items%}
                                     <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
                                     <option class="row d-flex justify-content-left mt-90" >item2<option>
@@ -182,7 +188,8 @@ min-height: 100vh;
                         
                                 </select> 
                                 &nbsp  &nbsp
-                               <textarea name="narration" id="" cols="30" rows="2" placeholder="Enter narration" style="height:5vh ;"></textarea>
+                             
+                               <textarea name="narration" id="narration" cols="30" rows="2" placeholder="Enter narration" style="height:5vh ;"></textarea>
 
                                &nbsp
                                &nbsp
@@ -207,8 +214,18 @@ min-height: 100vh;
               
   </form>
     </div>
-   
+ <!-- this script tag for dynamically add field-->  
     <script>
+      $('#firstitem').on('change', function () {
+            const selectedValue = $(this).val();
+            const narrationField = $('#narration');
+
+            if (selectedValue === 'specific_option_value') {
+                narrationField.show();
+            } else {
+                narrationField.hide();
+            }
+        }); 
       $(document).ready(function () {
     
         function addNewRow() {
@@ -216,7 +233,7 @@ min-height: 100vh;
              <br>
             <div class="form-row">
                 
-              <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+              <select name="" id="first-item" style="width: 15vw;color: black; height: 5vh;">
                 {% for i in items%}
                 <option class="row d-flex justify-content-left mt-90">{{ i.Name }}</option>
                 <option class="row d-flex justify-content-left mt-90">item2</option>
@@ -230,7 +247,7 @@ min-height: 100vh;
                 <option value="">contains</option>
               </select>
               &nbsp    &nbsp 
-              <textarea name="narration" id="" cols="30" rows="2" placeholder="Enter narration" style="height:5vh;"></textarea>
+              <textarea name="narration" id="narration" cols="30" rows="2" placeholder="Enter narration" style="height:5vh;"></textarea>
 
 
            
@@ -253,10 +270,10 @@ min-height: 100vh;
         $(document).on('click', '#DeleteRow', function () {
           $(this).closest('.form-row').remove();
         });
+        
       });
     </script>
-
     
-
-        
+   
     {% endblock %}
+  
