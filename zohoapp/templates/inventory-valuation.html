@@ -51,23 +51,23 @@ thead {
           <span></span> <i class="fa fa-caret-down"></i>
         </div>
       </div>
-        <i class="fa fa-gear" style="font-size:1.5vw;padding-left:350px ;"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
+        <i class="fa fa-gear" style="font-size:1.5vw;padding-left:300px ;"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
         
         <i class="fas fa-print " style="color:white; margin-left:450px ;"></i>
-        <select name="flter_tp" id="" style="width: 1vw;color:black;" >
+        <select name="flter_tp" id="" style="width: 1vw;color:black;" onchange="printpage(this.value)" >
             <option value=""></option>
-            <option value="" ><button>Print Preference</button></option>
+            <option value="print" ><button>Print Preference</button></option>
              
           
           </select>&nbsp&nbsp
-        <select name="flter_tp" id="" style="width: 100px; height: 28px;background-color: whitesmoke; padding-left: 2px;">
-          <option value="" hidden>Export AS</option>
+        <select name="flter_tp" id="" style="width: 100px; height: 28px;background-color: whitesmoke; padding-left: 2px;"onchange="printpage(this.value)">
+         <option value="" hidden>Export AS</option>
          
-          <option value="">PDF</option>
-          <option value="">XLS(Microsoft Excel 1997-2004 Compatible)</option>
-          <option value="">XLSX(Microsoft Excel)</option> 
+          <option value="print">PDF</option>
+          <option value="print">XLS(Microsoft Excel 1997-2004 Compatible)</option>
+          <option value="print">XLSX(Microsoft Excel)</option> 
          
-          <option value="">Export to Zoho sheet</option>
+          <option value="print">Export to Zoho sheet</option>
       
 
         </select>&nbsp&nbsp&nbsp
@@ -134,7 +134,16 @@ thead {
     <!-- </div> -->
 
 </div>
-
+<script>
+  function printpage(option)
+    {
+      if (option === 'print')
+      {
+   window.print();
+    }
+  }
+  
+</script>
 
 <script>
   $(function() {

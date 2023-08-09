@@ -45,9 +45,9 @@ body
 background: #00B4DB;
 background: -webkit-linear-gradient(to right, #0083B0, #00B4DB);
 background: linear-gradient(to right, #0083B0, #00B4DB);
-
-
 }
+
+
     
 </style>
 <script>
@@ -61,21 +61,21 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
     //    includeSelectAllOption:true
       }); 
     
-    
+
 });
 
 
 </script>
 <script>
- function clearAllSelections() {
-  var selectElement = document.getElementById("choices-multiple-remove-button");
-  var options = selectElement.options;
+    $(document).ready(function() {
+        $('#choices-multiple-remove-button').select2({
+            placeholder: 'Click or type to select',
+            allowClear: true,
+            tags: true // Allow custom tags
+        });
+    });
+</script>
 
-  for (var i = 0; i < options.length; i++) {
-    options[i].selected = false;
-  }
-}
-    </script>
 <div class="row">
     <div class="col-sm-12 " >
       <h1>
@@ -127,12 +127,12 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
         <div>
             <br><br> 
             <label for="" > Item Name</label>&nbsp&nbsp
-            <button style="background-color: transparent; color: white;" id="clearButton"> clear all</button>
+            <button  type="reset" class="btn btn-tansperent text-primary" id="clearButton" onclick="clearAllSelections()"> clear all</button>
            
             <br>
              <div class="row d-flex justify-content-left mt-100" style="color: black;">
                
-            <select id="choices-multiple-remove-button" placeholder="Click or Type to select" multiple  >
+            <select id="choices-multiple-remove-button" placeholder="Click or Type to select" multiple style="width: 300px;"  >
             
            
                 {% for i in items%}

@@ -12,16 +12,28 @@
   <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
   <script src="{% static 'assets/vendors/js/vendor.bundle.base.js'%}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
   
 
 </head>
 <style>
   .sidebar {
-    min-height: calc(100vh - 70px);
+    min-height: calc(150vh - 70px);
     background: transparent;
     font-weight: normal;
     padding: 0;
@@ -31,7 +43,6 @@
     -webkit-transition: width 0.25s ease, background 0.25s ease;
     -moz-transition: width 0.25s ease, background 0.25s ease;
     -ms-transition: width 0.25s ease, background 0.25s ease;
-   
 }
 .content-wrapper {
     background: transparent;
@@ -49,7 +60,7 @@
     }
   }
   .sectionhtml{
-    background-image: url("/static/images/background.avif");
+    background-color: #13151b;
 
     /* min-height: 380px; */
 
@@ -340,10 +351,80 @@
 .form-row input[type="email"] {
   flex: 1;
 }
-/*.item{
+/* .item{
   height:1200px;
+} */
+
+.menu-items{
+  margin-top: 1%;
+  margin-bottom: 1%;
+ 
 }
- Remove list styles and padding for the UL */
+
+
+nav .icons i{
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    margin: 1.3rem;
+
+}
+
+nav .icons i:hover{
+    color: var(--orange);
+}
+
+nav .search-bar-container{
+    width: 60%;
+    position: absolute;
+    padding-top: 1.5rem;
+    border-top: .1rem solid rgba(255, 255, 255, .2);
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+    clip-path: polygon(0 0,100% 0,100% 0,0 0);
+}
+
+nav .search-bar-container.active{
+    clip-path: polygon(0 0,100% 0,100% 100%,0 100%);
+}
+
+
+nav .search-bar-container #search-bar{
+    width: 100%;
+    padding: .5rem;
+    text-transform: none;
+    color: #333;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+
+}
+
+nav .search-bar-container label{
+    color: #fff;
+    cursor: pointer;
+    font-size: 3rem;
+    margin-left: 1.5rem;
+}
+
+nav .search-bar-container label:hover{
+    color: var(--orange);
+}
+
+.icons {
+  position: relative;
+}
+
+
+
+
+/* Show dropdown on hover */
+.icons:hover .dropdown-content {
+  display: block;
+}
+nav.navbar {
+  box-shadow: 0 2px 4px rgba(216, 213, 213, 0.3); /* Add your desired shadow properties here */
+}
 
 </style>
 
@@ -352,7 +433,7 @@
   <div class="container-scroller">
 
     <!-- partial:partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar" >
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top" style="background-color: transparent;">
         <a class="sidebar-brand brand-logo text-light text-decoration-none">
           <p style="color: white; font-size: 35px;margin-top: 3vh;">Zoho </p>
@@ -361,7 +442,7 @@
           <p style="color: white; opacity: 1; font-size: 35px;margin-top: 3vh;">ZD</p>
         </a>
       </div>
-      <ul class="nav">
+      <ul class="nav" style="position: fixed;" >
         <li class="nav-item profile">
           <div class="profile-desc">
             <div class="profile-pic">
@@ -378,12 +459,12 @@
             
         
 
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items ">
           <a class="nav-link"  href="{% url 'dashboard' %}">
             <span class="menu-icon">
               <i class="mdi mdi-home"></i>
             </span>
-            <span class="menu-title">Home</span>
+            <span class="menu-title text-white" >Home</span>
           </a>
         </li>
 
@@ -392,15 +473,15 @@
             <span class="menu-icon">
               <i class="mdi mdi-sitemap"></i>
             </span>
-            <span class="menu-title">Items</span>
+            <span class="menu-title text-white">Items</span>
             
           </a>
           <ul class="dropdown-menu">
             <li>              
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'itemview' %}">Items</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'additem' %}">
+                <a class="d-inline-block" style="color: #fafbfc" href="{% url 'itemview' %}">Items</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'additem' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -408,8 +489,8 @@
               </div> 
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'viewpricelist' %}">Price List</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'addprice' %}">
+                <a class="d-inline-block" style="color: #f7f8f8" href="{% url 'viewpricelist' %}">Price List</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'addprice' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -428,15 +509,15 @@
             <span class="menu-icon">
               <i class="mdi mdi-sitemap"></i>
             </span>
-            <span class="menu-title">Banking</span>
+            <span class="menu-title text-white">Banking</span>
             
           </a>
           <ul class="dropdown-menu">
             <li>              
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'banking_home' %}">Offline Banking</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'create_banking' %}">
+                <a class="d-inline-block" style="color: #f7fbff" href="{% url 'banking_home' %}">Offline Banking</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'create_banking' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -458,14 +539,14 @@
             <span class="menu-icon">
               <i class="mdi mdi-cart-outline "></i>
             </span>
-            <span class="menu-title">Sales</span>
+            <span class="menu-title text-white">Sales</span>
             
           </a>
           <ul class="dropdown-menu " >
             <li>
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'view_customr' %}">Customers</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'add_customers' %}">
+                <a class="d-inline-block" style="color: #f6f7f8" href="{% url 'view_customr' %}">Customers</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'add_customers' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -473,8 +554,8 @@
               </div> 
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'allestimates'%}">Estimates</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'newestimate' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'allestimates'%}">Estimates</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'newestimate' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -482,8 +563,8 @@
               </div> 
 
               <div class="dropdown-item ">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'retainer_invoice' %}">Retainer Invoices</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'add_invoice' %}">
+                <a class="d-inline-block" style="color: #fdfeff" href="{% url 'retainer_invoice' %}">Retainer Invoices</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'add_invoice' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -491,8 +572,8 @@
               </div> 
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="">Sales Orders</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="">
+                <a class="d-inline-block" style="color: #fafcff" href="">Sales Orders</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -500,8 +581,8 @@
               </div>
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'create_and_send_challan' %}">Delivery Challans</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'create_delivery_chellan' %}">
+                <a class="d-inline-block" style="color: #fbfdff" href="{% url 'create_and_send_challan' %}">Delivery Challans</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'create_delivery_chellan' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -509,8 +590,8 @@
               </div>
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'invoiceview' %}">Invoices</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'add_prod' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'invoiceview' %}">Invoices</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'add_prod' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -518,16 +599,16 @@
               </div> 
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="">Credit Notes</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="">
+                <a class="d-inline-block" style="color: #ffffff" href="">Credit Notes</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
                 </a>
               </div> 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'view_recurpage' %}">Recurring Invoice</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'create_recur' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'view_recurpage' %}">Recurring Invoice</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'create_recur' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -545,15 +626,15 @@
             <span class="menu-icon">
               <i class="mdi mdi-basket"></i>
             </span>
-            <span class="menu-title">Purchases</span>
+            <span class="menu-title text-white">Purchases</span>
             
           </a>
           <ul class="dropdown-menu">
             <li>                
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'view_vendor_list' %}">Vendors</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'vendor' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'view_vendor_list' %}">Vendors</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'vendor' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -561,8 +642,8 @@
               </div>   
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="">Expenses</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="">
+                <a class="d-inline-block" style="color: #ffffff" href="">Expenses</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -570,8 +651,8 @@
               </div>    
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'recurringbase' %}">Recurring Expenses</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'recurringhome' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'recurringbase' %}">Recurring Expenses</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'recurringhome' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -579,8 +660,8 @@
               </div>
 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'purchaseView' %}">Purchase Orders</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'purchase_order' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'purchaseView' %}">Purchase Orders</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'purchase_order' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -588,8 +669,8 @@
               </div>    
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'paymentmethod' %}">Payment Made</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'paymentadd_method' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'paymentmethod' %}">Payment Made</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'paymentadd_method' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -597,8 +678,8 @@
               </div> 
                 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="">Bills</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="">
+                <a class="d-inline-block" style="color: #ffffff" href="">Bills</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -606,8 +687,8 @@
               </div>   
               
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'recurring_bill' %}">Recurring Bills</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'add_recurring_bills' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'recurring_bill' %}">Recurring Bills</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'add_recurring_bills' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -624,14 +705,14 @@
             <span class="menu-icon">
               <i class="mdi mdi-clock"></i>
             </span>
-            <span class="menu-title">Time Tracking</span>
+            <span class="menu-title  text-white">Time Tracking</span>
             
           </a>
           <ul class="dropdown-menu">
             <li>              
 <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'vproj' %}">Projects</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'proj' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'vproj' %}">Projects</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'proj' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -649,14 +730,14 @@
             <span class="menu-icon">
               <i class="mdi mdi-account"></i>
             </span>
-            <span class="menu-title">Accountant</span>
+            <span class="menu-title  text-white">Accountant</span>
             
           </a>
           <ul class="dropdown-menu">
             <li>              
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #3f6391" href="{% url 'chartofaccount_home' %}">Chart Of Accounts</a>
-                <a class="d-inline-block" style="color: #3f6391;margin-left: 3px;" href="{% url 'chartofaccount_home' %}">
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'chartofaccount_home' %}">Chart Of Accounts</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'chartofaccount_home' %}">
                   <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -670,11 +751,11 @@
 
 
         <li class="nav-item menu-items">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="{% url 'report' %}">
             <span class="menu-icon">
               <i class="mdi mdi-calendar-week"></i>
             </span>
-            <span class="menu-title">Reports</span>
+            <span class="menu-title text-white">Reports</span>
           </a>
         </li>
 
@@ -684,7 +765,7 @@
             <span class="menu-icon">
               <i class="mdi mdi-file-outline"></i>
             </span>
-            <span class="menu-title">Documents</span>
+            <span class="menu-title text-white">Documents</span>
           </a>
         </li>
 
@@ -694,28 +775,7 @@
             <span class="menu-icon">
               <i class="mdi mdi-cash-multiple"></i>
             </span>
-            <span class="menu-title">Payroll</span>
-          </a>
-        </li>
-
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="">
-            
-          </a>
-        </li>
-
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
-            
-          </a>
-        </li>
-
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
-            
+            <span class="menu-title text-white">Payroll</span>
           </a>
         </li>
 
@@ -724,10 +784,9 @@
 
 
 
-
     <div class="container-fluid page-body-wrapper">
 
-      <nav class="navbar p-0 fixed-top d-flex flex-row " style="z-index: 9999;">
+      <nav class="navbar p-0 fixed-top d-flex flex-row" style="z-index: 9999;">
         <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center" style="background-color: transparent;">
           <a class="sidebar-brand brand-logo-mini text-dark text-decoration-none " href="index.html">
             <p style="color: white; opacity: 1; font-size: 35px;margin-top: 3vh;padding-left: 100px;">Zoho</p>
@@ -737,11 +796,16 @@
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
-          <ul class="navbar-nav w-100">
-            <input type="text" autocomplete="off" id="myInput" onkeyup="filter(this);" class="form-control text-dark" placeholder="search..." />
-            <div class="input-group-append"></div>
+         
+          <ul class="navbar-nav">
+            <div class="search-bar-container" id="search-container">
+              <input type="text" autocomplete="off" id="myInput" onkeyup="filter(this);" class="form-control text-dark" placeholder="search..." />
+              <div class="input-group-append"></div>
+            </div>
+
+            
         </ul>
-        <div class="mt-5" id="myDIV" style="position:absolute;width:550px;height:1px;">
+        <div class="mt-5" id="myDIV" style="position:absolute;width:550px;top:50%;">
             <ul id="myList" class="one" style="background-color: #131414;list-style: none;">
               <li><a class="text-white" href="{% url 'dashboard' %}">Dashboard</a></li>
               <li><a class="text-white" href="{% url 'itemview' %}">Item</a></li>
@@ -771,27 +835,61 @@
 
             
   <script>
+$(document).ready(function() {
+  // Initially hide the search bar container
+  $("#search-container").hide();
 
-    $(document).ready(function(){
+  // When the search icon is clicked
+  $("#search-btn").click(function() {
+    // Toggle the active state of the search bar container
+    $("#search-container").toggleClass("active");
+
+    // Clear the input box value
+    $("#myInput").val('');
+
+    // If the search bar container is active, show it; otherwise, hide it and clear the input box value
+    if ($("#search-container").hasClass("active")) {
+      $("#search-container").show();
+    } else {
+      $("#search-container").hide();
       $("#myList li").hide();
-      
-      $("#myInput").on("keyup", function() {
-        
-        var value = $(this).val().toLowerCase();
-        if (value !== '' ) {
-        $("#myList li").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });   
-        } else {
-          $("#myList li").hide();   
-        }    
+    }
+  });
+
+  $("#myList li").hide();
+
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    if (value !== '') {
+      $("#myList li").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
       });
-    });
+    } else {
+      $("#myList li").hide();
+    }
+  });
+});
+
      </script>
-    
           <ul class="navbar-nav navbar-nav-right">
+            <li>
+            <div class="icons">
+              <i class="fas fa-search" id="search-btn"></i>
+            </div>
+          </li>
+          <li>
+            <div class="icons">
+              <i class="far fa-bell" style="font-size:30px;"></i>
+             
+            </div>
+          </li>
+          <li>
+            <div class="icons">
+              <i class="fa fa-gear" style="font-size:30px;"></i>
+            </div>
+          </li>
             <li class="nav-item dropdown">
-              <a class="nav-link" id="profileDropdown" href="" data-bs-toggle="dropdown">
+              <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                 <div class="navbar-profile">
                   {% if company.profile_pic %}
                   <img class="img-xs rounded-circle" src="{{ company.profile_pic.url }}" alt="">
@@ -805,7 +903,7 @@
    
                   <p class="mb-0 d-none d-sm-block navbar-profile-name" style="color: white;">
                     
-                    {% if company.company_name != 'None' %}
+                    {% if company.company_name != None %}
                     {{ company.company_name }}
                     {% else %}
                     Add Company
@@ -897,7 +995,10 @@
 <script src="{% static 'assets/js/dashboard.js' %}"></script>
 
 <script src="{% static 'assets/vendors/js/vendor.bundle.base.js'%}"></script> 
-   
+ 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 </body>
 </section>
 </html>

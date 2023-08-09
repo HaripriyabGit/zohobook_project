@@ -60,18 +60,7 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
 });
 </script>
 <!-- this script tag for clear listbox-->
-<script>
-   
-    function clearSelection() {
-        const selectElement = document.getElementById('choices-multiple-remove-button');
-        selectElement.selectedIndex = -1;
-    }
 
-    document.getElementById('clearSelectionButton').addEventListener('click', function() {
-        clearSelection();
-    });
-    
-</script>
 
 <!-- this script tag for show corresponding forms
 <script>
@@ -119,17 +108,17 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
             <div>
          
                 <label for="" > Item Name</label>&nbsp&nbsp
-                <button style="background-color: transparent; color: white;" id="clearSelectionButton"> clear all</button>
+                <button type="reset" class="btn btn-tansperent text-primary"  id="clearSelectionButton"> clear all</button>
                
                 <br>
                  <div class="row d-flex justify-content-left mt-100" style="color: black;">
                    
                 <select id="choices-multiple-remove-button" placeholder="Click or Type to select" multiple  >
-                
-               
+                 
                     {% for i in items%}
                     <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
                     <option class="row d-flex justify-content-left mt-90" >item2<option>
+                      <option class="row d-flex justify-content-left mt-90" >product<option>
                  {%endfor%}
                 </select>
             </div>
@@ -168,42 +157,33 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
                     <div class="col">
                         <h4>Advanced Filters</h4>
                         <p style="white-space: nowrap;font-size: medium;">Use advanance fiter to filter the report based on the field of</p>
-                        <div id="row">
-                            <div class="form-row" style="margin-right:30% ;">
-                                <select name="" id=" firstitem" style="width: 15vw;color: black; height: 5vh;">
-                                    {% for i in items%}
-                                    <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
-                                    <option class="row d-flex justify-content-left mt-90" >item2<option>
-                                 {%endfor%}
-                        
-                        
-                                </select>  &nbsp  &nbsp
-                                <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
-                                    <option value="" hidden>select</option>
-                                    <option value="">is</option>
-                                    <option value="">start with</option>
-                                    <option value="">end with</option>
-                                    <option value=""> contains</option>
-                        
-                        
-                                </select> 
-                                &nbsp  &nbsp
-                             
-                               <textarea name="narration" id="narration" cols="30" rows="2" placeholder="Enter narration" style="height:5vh ;"></textarea>
-
-                               &nbsp
-                               &nbsp
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-danger"
-                                            id="DeleteRow"
-                                            type="button">
-                                        <i class="bi bi-trash"></i>
-                                      
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="form-row pt-2">
+                          <select name="" class="option-select" style="width: 15vw;color: black; height: 5vh;">
+                            <option class="row d-flex justify-content-left mt-90" hidden>select</option>
+                            <option class="row d-flex justify-content-left mt-90" >item 1</option>
+                            <option class="row d-flex justify-content-left mt-90" >item 2</option>
+                            <option class="row d-flex justify-content-left mt-90" >item 3</option>
+                            <option class="row d-flex justify-content-left mt-90" >item 4</option>
+                          </select>
+                          &nbsp  &nbsp
+                          <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+                            <option value="" hidden>select</option>
+                            <option value="">is</option>
+                            <option value="">is not</option>
+                            <option value="">start with</option>
+                            <option value="">end with</option>
+                            <option value="">continue</option>
+                          </select> 
+                          &nbsp &nbsp
+                          <textarea name="fb_text" class="item-textarea" cols="30" rows="2" style="height:5vh; display:none;"></textarea>
+                          &nbsp&nbsp
+                          <div class="input-group-prepend">
+                            <button class="btn btn-danger" id="DeleteRow" type="button">
+                              <i class="bi bi-trash"></i>  
+                            </button>
+                          </div>
                         </div>
-                        <br>
+                        <br><br>
      
                         <div id="newinput"></div>
                         <button id="rowAdder" type="button" class="btn btn-success">
@@ -215,65 +195,61 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
   </form>
     </div>
  <!-- this script tag for dynamically add field-->  
-    <script>
-      $('#firstitem').on('change', function () {
-            const selectedValue = $(this).val();
-            const narrationField = $('#narration');
-
-            if (selectedValue === 'specific_option_value') {
-                narrationField.show();
-            } else {
-                narrationField.hide();
-            }
-        }); 
-      $(document).ready(function () {
     
-        function addNewRow() {
-          const newRow = `
-             <br>
-            <div class="form-row">
-                
-              <select name="" id="first-item" style="width: 15vw;color: black; height: 5vh;">
-                {% for i in items%}
-                <option class="row d-flex justify-content-left mt-90">{{ i.Name }}</option>
-                <option class="row d-flex justify-content-left mt-90">item2</option>
-                {% endfor %}
-              </select>    &nbsp    &nbsp 
-              <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
-                <option value="" hidden>select</option>
-                <option value="">is</option>
-                <option value="">start with</option>
-                <option value="">end with</option>
-                <option value="">contains</option>
-              </select>
-              &nbsp    &nbsp 
-              <textarea name="narration" id="narration" cols="30" rows="2" placeholder="Enter narration" style="height:5vh;"></textarea>
-
-
-           
-             &nbsp  
-             <br>
-              <div class="input-group-prepend">
-                <button class="btn btn-danger" id="DeleteRow" type="button">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </div>
-          `;
-          $('#newinput').append(newRow);
-        }
-    
-        $('#rowAdder').on('click', function () {
-          addNewRow();
-        });
-    
-        $(document).on('click', '#DeleteRow', function () {
-          $(this).closest('.form-row').remove();
-        });
-        
-      });
-    </script>
-    
+ <script>
+  $(document).ready(function () {
+  
+    function addNewRow() {
+      const newRow = `
+      <div class="form-row pt-2">
+        <select name="" class="option-select" style="width: 15vw;color: black; height: 5vh;">
+          <option class="row d-flex justify-content-left mt-90" hidden>options</option>
+          <option class="row d-flex justify-content-left mt-90" >item 1</option>
+          <option class="row d-flex justify-content-left mt-90" >item 2</option>
+          <option class="row d-flex justify-content-left mt-90" >item 3</option>
+          <option class="row d-flex justify-content-left mt-90" >item 4</option>
+        </select>
+        &nbsp  &nbsp
+        <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
+          <option value="" hidden>select</option>
+          <option value="">is</option>
+          <option value="">is not</option>
+          <option value="">start with</option>
+          <option value="">end with</option>
+          <option value="">continue</option>
+        </select> 
+        &nbsp &nbsp
+        <textarea name="fb_text" class="item-textarea" cols="30" rows="2" style="height:5vh; display:none;"></textarea>
+        &nbsp&nbsp
+        <div class="input-group-prepend">
+          <button class="btn btn-danger" id="DeleteRow" type="button">
+            <i class="bi bi-trash"></i>  
+          </button>
+        </div>
+      </div>
+      `;
+      $('#newinput').append(newRow);
+    }
+  
+    $('#rowAdder').on('click', function () {
+      addNewRow();
+    });
+  
+    $(document).on('click', '#DeleteRow', function () {
+      $(this).closest('.form-row').remove();
+    });
+  
+    $(document).on('change', '.option-select', function () {
+      const selectedOption = $(this).val();
+      const textarea = $(this).closest('.form-row').find('.item-textarea');
+      if (selectedOption !== '') {
+        textarea.show();
+      } else {
+        textarea.hide();
+      }
+    });
+  });
+  </script>
    
     {% endblock %}
   

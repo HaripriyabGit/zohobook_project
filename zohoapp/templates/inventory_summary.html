@@ -2,7 +2,6 @@
 {% block content %}
 {% load static %}
 
-
 <style>
   
 body
@@ -20,10 +19,11 @@ a {
 
 
 table {
-  width: 100%;
+  width: 100px;
   border-collapse: collapse;
   margin-top: 20px;
   color: #333;
+  margin-left:10% ;
 }
 
 th, td {
@@ -42,7 +42,16 @@ thead {
 .daterangepicker{
     color: black;
   }
+  @media print {
+    /* Prevent page breaks within elements */
+    .no-page-break {
+        page-break-inside: avoid;
+        display: none;
+    }
+}
 </style>
+
+
 
  <br> 
  <div class="row mt-4">
@@ -55,14 +64,16 @@ thead {
           <span></span> <i class="fa fa-caret-down"></i>
         </div>
       </div>
-
-        <i class="fa fa-gear" style="font-size:1.5vw;padding-left:350px ;"></i><a href="{% url 'custom_repot' %}">Custom Report</a>
+       <div class="row">
+        <div class="col">
+        <i class="fa fa-gear" style="font-size:1.5vw;padding-left:300px ;"></i><a href="{% url 'custom_repot' %}">Custom Report</a>
         
-        <i class="fas fa-print " style="color:white; margin-left:450px ;"></i>
-        <select name="flter_tp" id="" style="width: 1vw;color:black;" >
+         <i class="fas fa-print " style="color:white;margin-left:550px ;height:3vh ;"></i>
+        <select name="flter_tp" id="" style="width: 1vw;color:black;"  onchange="printpage(this.value)">
             <option value=""></option>
-            <option value="option" >
-           <button> Print Preference</button>  </option>
+            <option value="print" >Print Preference</option>
+           
+          
           </select>&nbsp&nbsp
         <select name="flter_tp" id="" style="width: 100px; height: 28px;background-color: whitesmoke; padding-left: 2px;">
           <option value="" hidden>Export AS</option>
@@ -76,8 +87,8 @@ thead {
 
         </select>&nbsp&nbsp&nbsp
        <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger"> 
-        
-      
+      </div> 
+      </div>
     
 <br><br><br><br><br>
 
@@ -85,17 +96,17 @@ thead {
 
    
         <div class="row">
-           <div style="padding-left: 38%;"><h4>Zylker</h4></div>
+           <div style="padding-left: 44%;"><h4>Zylker</h4></div>
 
-           <div ><a class="text-white" style="font-size: 2rem; padding-left: 30%;white-space: nowrap;">Inventory Summary </a></div>
-                  <div style="padding-left: 35%;"><h5>As of 15 August 2023</h5></div>
+           <div ><a class="text-white" style="font-size: 2rem; padding-left: 35%;white-space: nowrap;">Inventory Summary </a></div>
+                  <div style="padding-left: 40%;"><h5>As of 15 August 2023</h5></div>
             </div>
         </div>   
     
-        <div class="row">
+        <div class="row" >
             <div class="col-sm-12 col-md-11 col-lg-11">
-              
-                <table class="table  text-white" id="myTable" style="width: 100%;">
+              <div class="table-resposive">
+                <table class="table  text-white" id="myTable" style="width: 100px;padding-right:10px; ;">
                     <thead>
                         <tr>
                             <th colspan="5"></th>
@@ -141,6 +152,7 @@ thead {
                  
                     </tbody>
                 </table>
+              </div>
                 <br><br><br><br><br>
             </div>
       
@@ -155,7 +167,14 @@ thead {
     <!-- </div> -->
 
 </div>
-
+<script>
+  function printpage(option){
+    if (option === 'print'){
+      window.print();
+    }
+   
+  }
+  </script>
 <script>
   $(function() {
   

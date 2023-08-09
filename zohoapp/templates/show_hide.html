@@ -1,5 +1,5 @@
 
-{% extends 'base.html' %}
+{% extends 'base3.html' %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -14,64 +14,132 @@
     }
 
     form {
-        max-width: 50vh;
+        max-width: 20vw;
         margin: 0 auto;
        
         border-radius: 5px;
     }
-    .container2 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin-right:150% ;
-  }
+  .forms{
+    
+    margin-left:300px; ;
+    width:30vw ;
+  
+}
 
 
-  .column {
-        flex: 1;
-        border: 1px solid #ccc;
+    #container2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: transparent;
+      
+    }
+
+    .column-card {
+        background-color: white;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        vertical-align: top;
-   
+        padding: 20px;
+        margin: 10px;
+        overflow: hidden;
+        width:25vw ;
+      
+    }
+
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .col-md-6 {
+        flex-basis: calc(50% - 20px); 
+        margin: 10px;
+    }
+
+
+
+
+    .column-title {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
     }
 
     .search-bar {
         margin-bottom: 10px;
-        position: relative;
     }
 
     .search-input {
-        padding: 5px 10px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
+        padding: 5px;
         width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
     }
 
     .search-icon {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
         cursor: pointer;
     }
-    h2{
-      white-space: nowrap;
-    }
+
     .item-list {
-    display: inline-block;
-    align-items: center;
- 
-    position: relative;
-    white-space: nowrap; 
-
-    
-    }
-    .item.highlight {
-        background-color: #ffffe0;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
     }
 
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #ccc;
+        color: black;
+    }
+
+    .add,
+    .remove {
+        cursor: pointer;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .add:hover,
+    .remove:hover {
+        color: #0056b3;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .button.cancel-button {
+        background-color: #ccc;
+    }
+
+    /* Highlight the filtered items */
+    .highlight {
+        background-color: #ffffcc;
+    }
     .item:hover .add,
     .item:hover .remove {
         display: inline-block;
@@ -95,30 +163,6 @@
         background-color: #f44336;
         color: white;
     }
-
-    .buttons {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 10px;
-    }
-
-    .button {
-        margin-left: 10px;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-    .report-button {
-        background-color: #f44336;
-        color: white;
-    }
-
-    .cancel-button {
-        background-color: #ccc;
-    }
-   
 </style>
 
 <div class="row">
@@ -140,39 +184,42 @@
     </div>
 </div>
 
-<form action="">
+<form action="" class="forms">
     <div class="container" id="container2">
         <div class="row">
-            <div class="col-md-6" id="originalColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc; position: relative;padding-right: 15px;">
-                <h2 style="color: white;position: sticky;top: 0;">Available Column</h2>
+            <div class="col-md-6 column-card" id="originalColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc; position: relative;padding-right: 15px;">
+                <h2 class="column-title" style="color: black;position: sticky;top: 0;">Available Column</h2>
                 <div class="search-bar" style="position: sticky;top: 40px;" >
+             
                     <input type="text" id="searchInput" class="search-input" placeholder="Search items">
-                    <span class="search-icon">&#128269;</span>
+                    <i class=" search-icon fas fa-search">&#128269;</i>
                 </div>
-                <ul class="item-list" style="padding: 0;margin: 0;list-style: none;">
-                    <li class="item"style="padding: 0;"><span class="item-text">Item type</span> <span class="add">+</span></li>
-                    <li class="item"style="padding: 0;margin: 0;"><span class="item-text">Product type</span> <span class="add">+</span></li>
+                <ul class="item-list" >
+                    
+                    <li class="item"><span class="item-text">Item type</span> <span class="add">+</span></li>
+                
+                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
                     <li class="item"><span class="item-text">Status</span> <span class="add">+</span></li>
                     <li class="item"><span class="item-text">Usage Unit</span> <span class="add">+</span></li>
                     <li class="item"><span class="item-text">Sales Description</span> <span class="add">+</span></li>
                     <li class="item"><span class="item-text">Sales price</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Created Time</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Last Modification Time</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Purchase Description</span> <span class="add">+</span></li>
                     <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Parchase Price</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Item End</span> <span class="add">+</span></li>
+                    <li class="item"><span class="item-text">Item start</span> <span class="add">+</span></li>
                     
                 </ul>
-                <div class="buttons" style="position: sticky;bottom: 10px;">
-                    <button class="button report-button">Report</button>
+                <div class="buttons" style="position: sticky;bottom: 1px;">
+                    <button class="button report-button">Run Report</button>
                     <button class="button cancel-button">Cancel</button>
                 </div>
             </div>
-            <div class="col-md-6" id="addedColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc;padding-left: 15px;">
-                <h2 style="color: white;position: sticky;top:0;" >Selected Column</h2>
-                <ul class="item-list" style="padding: 0;margin: 0;list-style: none;">
+            <div class="col-md-6 column-card" id="addedColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc;padding-left: 15px;">
+                <h2 style="color: black;position: sticky;top:0;" class="column-title">Selected Column</h2>
+                <ul class="item-list" style="padding: 0;margin: 0;list-style: none; color: black;">
               
                 </ul>
             </div>
@@ -209,7 +256,7 @@
         availableItems.forEach(item => {
             const itemText = item.querySelector(".item-text").textContent.toLowerCase();
             if (itemText.includes(searchTerm)) {
-                item.style.display = "flex";
+                item.style.display = "inline-block";
                 if (searchTerm !== "") {
                     item.classList.add("highlight");
                 } else {
@@ -221,6 +268,6 @@
             }
         });
     });
-</script>
+</script>  
 
 {% endblock %}
