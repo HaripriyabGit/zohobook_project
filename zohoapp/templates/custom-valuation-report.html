@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base3.html' %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -158,13 +158,13 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
                         <h4>Advanced Filters</h4>
                         <p style="white-space: nowrap;font-size: medium;">Use advanance fiter to filter the report based on the field of</p>
                         <div class="form-row pt-2">
-                          <select name="" class="option-select" style="width: 15vw;color: black; height: 5vh;">
-                            <option class="row d-flex justify-content-left mt-90" hidden>select</option>
-                            <option class="row d-flex justify-content-left mt-90" >item 1</option>
-                            <option class="row d-flex justify-content-left mt-90" >item 2</option>
-                            <option class="row d-flex justify-content-left mt-90" >item 3</option>
-                            <option class="row d-flex justify-content-left mt-90" >item 4</option>
-                          </select>
+                          <select class="option-select" style="width: 15vw;color: black; height: 5vh;" >
+                 
+                            {% for i in items%}
+                            <option value="" hidden>select</option>
+                            <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
+                         {%endfor%}
+                        </select>
                           &nbsp  &nbsp
                           <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
                             <option value="" hidden>select</option>
@@ -202,13 +202,14 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
     function addNewRow() {
       const newRow = `
       <div class="form-row pt-2">
-        <select name="" class="option-select" style="width: 15vw;color: black; height: 5vh;">
-          <option class="row d-flex justify-content-left mt-90" hidden>options</option>
-          <option class="row d-flex justify-content-left mt-90" >item 1</option>
-          <option class="row d-flex justify-content-left mt-90" >item 2</option>
-          <option class="row d-flex justify-content-left mt-90" >item 3</option>
-          <option class="row d-flex justify-content-left mt-90" >item 4</option>
-        </select>
+        <select class="option-select" style="width: 15vw;color: black; height: 5vh;" >
+                 
+                 {% for i in items%}
+                 <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
+                 <option class="row d-flex justify-content-left mt-90" >item2<option>
+                   <option class="row d-flex justify-content-left mt-90" >product<option>
+              {%endfor%}
+             </select>
         &nbsp  &nbsp
         <select name="" id="" style="width: 15vw;color: black; height: 5vh;">
           <option value="" hidden>select</option>

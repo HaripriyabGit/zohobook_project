@@ -1,7 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base3.html' %}
 {% block content %}
 {% load static %}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
   
@@ -39,6 +42,63 @@ thead {
 .daterangepicker{
     color: black;
   }
+
+/* Styling for the modal background */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 10%;
+    width: 90%;
+    height: 90%;
+    background-color: transparent;
+    margin-bottom:100% ;
+}
+
+/* Styling for the modal content */
+.modal-content {
+    background-color: white;
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 10%;
+    left:10%;
+    right:10%
+}
+
+/* Styling for the close button */
+.close {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: red;
+}
+
+/* Styling for the button inside the modal */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.warning-icon {
+    color: #FFD700; 
+    font-size: 24px;
+    margin-right: 5px;
+}
 </style>
 
  <br> 
@@ -60,23 +120,20 @@ thead {
              
           
           </select>&nbsp&nbsp
-        <select name="flter_tp" id="" style="width: 100px; height: 28px;background-color: whitesmoke; padding-left: 2px;"onchange="printpage(this.value)">
-         <option value="" hidden>Export AS</option>
-         
-          <option value="print">PDF</option>
-          <option value="print">XLS(Microsoft Excel 1997-2004 Compatible)</option>
-          <option value="print">XLSX(Microsoft Excel)</option> 
-         
-          <option value="print">Export to Zoho sheet</option>
-      
-
+          <select name="dropdowns" id="exportDropdown" style="width: 100px; height: 28px; padding-left: 2px; background-color: azure">
+            <option value="" hidden>Export AS</option>
+            <option value="pdf">PDF</option>
+            
+            <option value="xls">XLS (Microsoft Excel 1997-2004 Compatible)</option>
+            <option value="xlsx">XLSX (Microsoft Excel)</option>
+            <option value="zoho">Export to Zoho sheet</option>
         </select>&nbsp&nbsp&nbsp
        <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger"> 
         
       
     
 <br><br><br><br><br>
-
+<div  class="contentToExport">
   <div  style="top: 7rem; " >
 
    
@@ -120,6 +177,7 @@ thead {
                  
                     </tbody>
                 </table>
+              </div>
                 <br><br><br><br><br>
             </div>
       
@@ -134,6 +192,85 @@ thead {
     <!-- </div> -->
 
 </div>
+<div id="pdfModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header" style="background-color: lightgray;margin-bottom:10% ;">
+     
+      <h2 style="color: black;font-size: larger;font-weight: bold;justify-content: right;">Export Report As PDF</h2>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body" >
+      <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
+      <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
+      <a href="" type="button" onclick="page()">customize pdf</a>
+    </div>
+    <div class="modal-footer">
+      <button class="button_ex">Export</button>
+      <button>cancel</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="xlsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header" style="background-color: lightgray;margin-bottom:10% ;">
+     
+      <h2 style="color: black;font-size: larger;font-weight: bold;justify-content: right;">Export Report as XLS (Microsoft Excel 1997-2004 Compatible)</h2>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body" >
+      <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
+      <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
+      
+    </div>
+    <div class="modal-footer">
+      <button onclick="page()">Export</button>
+      <button>cancel</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="xlsxModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header" style="background-color: lightgray;margin-bottom:10% ;">
+     
+      <h2 style="color: black;font-size: larger;font-weight: bold;justify-content: right;">Export Report as XLSX (Microsoft Excel)</h2>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body" >
+      <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
+      <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
+      
+    </div>
+    <div class="modal-footer">
+      <button onclick="page()">Export</button>
+      <button>cancel</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="zohoModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+  <div class="modal-body" >
+    <span class="warning-icon">&#9888;</span>
+    <p  style="color: black;font-size: medium;">This report will be exported and saved in Zoho Sheet under your account. Are you sure you want to export this report to Zoho Sheet?</p>
+    
+  </div>
+  <div class="modal-footer">
+    <button onclick="page()">Export PDF</button>
+    <button>cancel</button>
+  </div>
+  </div>
+</div>&nbsp&nbsp&nbsp
+
+</div> 
+</div>
+
 <script>
   function printpage(option)
     {
@@ -143,6 +280,11 @@ thead {
     }
   }
   
+</script>
+<script>
+  // function page(){
+  //   window.print();
+  // }
 </script>
 
 <script>
@@ -173,5 +315,55 @@ thead {
   });
   </script>
 
+<script>
+
+  $(document).ready(function() {
+      $("#exportDropdown").change(function() {
+          var selectedOption = $(this).val();
+          $(".modal").hide();
+          
+          if (selectedOption === "pdf") {
+              $("#pdfModal").show();
+          } 
+         
+          else if(selectedOption === "xls")
+          {
+            $("#xlsModal").show();
+          }
+          else if(selectedOption === "xlsx")
+          {
+            $("#xlsxModal").show();
+          }
+          else if(selectedOption === "zoho")
+          {
+            $("#zohoModal").show();
+          }
+      });
+  
+      // Close modal when the close button is clicked
+      $(".close").click(function() {
+          $(this).closest(".modal").hide();
+      });
+  });
+  </script>
+
+<script>
+  document.querySelector('.button_ex').addEventListener('click', function () {
+    const element = document.getElementById('contentToExport'); 
+    const availablewidth =300;
+    const numberofcolumn =8;
+    const column=availablewidth/numberofcolumn;
+   
+    const pdfOptions = {
+      margin: 10,
+      filename: 'inventory_valuation.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 4 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait',tablewidth:availablewidth * numberofcolumn },
+    };
+
+    html2pdf().from(element).set(pdfOptions).set(column).save();
+  });
+</script>
 
 {% endblock %}
