@@ -1,10 +1,10 @@
 {% extends 'base3.html' %}
 {% block content %}
 {% load static %}
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
 
 <style>
   
@@ -19,11 +19,15 @@ a {
 }
 
 
+
+
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   color: #333;
+  margin-left:5px ;
 }
 
 th, td {
@@ -42,8 +46,15 @@ thead {
 .daterangepicker{
     color: black;
   }
+  @media print {
+ 
+    .no-page-break {
+        page-break-inside: avoid;
+        display: none;
+      
+    }
+}
 
-/* Styling for the modal background */
 .modal {
     display: none;
     position: fixed;
@@ -99,64 +110,67 @@ button:hover {
     font-size: 24px;
     margin-right: 5px;
 }
+
 </style>
+
+
 
  <br> 
  <div class="row mt-4">
     <div class="col-sm-12">
 
+      
       <div class="b text-black">
         <div id="reportrange" style="background: white; color: black; cursor: pointer; padding: 5px 10px; border: 1px solid black; height: 4vh; width: 19vw;">
           <i class="fa fa-calendar"></i>&nbsp;
           <span></span> <i class="fa fa-caret-down"></i>
         </div>
       </div>
+       <div class="row">
+        <div class="col">
         <i class="fa fa-gear" style="font-size:1.5vw;padding-left:300px ;"></i><a href="{% url 'custom_valuation_repot' %}">Custom Report</a>
         
-        <i class="fas fa-print " style="color:white; margin-left:450px ;"></i>
-        <select name="flter_tp" id="" style="width: 1vw;color:black;" onchange="printpage(this.value)" >
+         <i class="fas fa-print " style="color:white;margin-left:550px ;height:3vh ;"></i>
+        <select name="printdrop" id="printdrop" style="width: 1vw;color:black;"  onchange="printpage(this.value)">
             <option value=""></option>
-            <option value="print" ><button>Print Preference</button></option>
-             
+            <option value="print" >Print Preference</option>
+           
           
           </select>&nbsp&nbsp
           <select name="dropdowns" id="exportDropdown" style="width: 100px; height: 28px; padding-left: 2px; background-color: azure">
             <option value="" hidden>Export AS</option>
             <option value="pdf">PDF</option>
-            
+        
             <option value="xls">XLS (Microsoft Excel 1997-2004 Compatible)</option>
             <option value="xlsx">XLSX (Microsoft Excel)</option>
             <option value="zoho">Export to Zoho sheet</option>
-        </select>&nbsp&nbsp&nbsp
-       <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger"> 
-        
-      
-    
+        </select>
+        <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger"> 
+       
 <br><br><br><br><br>
-<div  class="contentToExport">
+<div id="contentToExport">
   <div  style="top: 7rem; " >
 
    
         <div class="row">
-           <div style="padding-left: 40%;"><h4>Zylker</h4></div>
+           <div style="padding-left: 45%;"><h4 style="color:grey;
+            ">Zylker</h4></div>
 
-           <div ><a class="text-white" style="font-size: 2rem; padding-left: 26%;white-space: nowrap;">Inventory Valuation Summary </a></div>
-                  <div style="padding-left: 37%;"><h5>As of 15 August 2023</h5></div>
+           <div ><a class="text-secondary" style="font-size: 2rem; padding-left: 30%;white-space: nowrap;color: #333;">Inventory Valuation Summary </a></div>
+                  <div style="padding-left:40%;color: grey;"><h5>As of 15 August 2023</h5></div>
             </div>
         </div>   
     
-        <div class="row">
-            <div class="col-sm-12 col-md-11 col-lg-11">
-              
-                <table class="table  text-white" id="myTable" style="width: 100%;">
+        <div class="row" >
+            <div class="col">
+              <div class="table-resposive">
+                <table class="table  text-white" id="myTable" >
                     <thead>
-                       
                       <tr>
                         <th>ITEM NAME</th>
                         <th>SKU</th>
-                      
                         <th >STOCK ON HAND</th>
-                        <th>INVENTORY ASSET VALUE</th>
+                        <th>Inventory ASSET VALUE</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -169,9 +183,6 @@ button:hover {
                         <td></td>
                         <td></td>
                         <td></td>
-
-
-        
                        
                       </tr>
                  
@@ -184,7 +195,7 @@ button:hover {
            
 
         </div>
-      
+      </div>    
 
            
         
@@ -202,10 +213,10 @@ button:hover {
     <div class="modal-body" >
       <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
       <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
-      <a href="" type="button" onclick="page()">customize pdf</a>
+      <a href="" onclick="page()">customize pdf</a>
     </div>
     <div class="modal-footer">
-      <button class="button_ex">Export</button>
+      <button onclick="convertToPDF()" class="button_ex">Export</button>
       <button>cancel</button>
     </div>
   </div>
@@ -226,12 +237,12 @@ button:hover {
       
     </div>
     <div class="modal-footer">
-      <button onclick="page()">Export</button>
+      <button class="xlsExportButton" id="xlsExportButton">Export</button>
       <button>cancel</button>
     </div>
   </div>
 </div>
-</div>
+
 
 <div id="xlsxModal" class="modal">
   <div class="modal-content">
@@ -246,12 +257,12 @@ button:hover {
       
     </div>
     <div class="modal-footer">
-      <button onclick="page()">Export</button>
+      <button class="xlsxExportButton" >Export</button>
       <button>cancel</button>
     </div>
   </div>
 </div>
-</div>
+
 
 <div id="zohoModal" class="modal">
   <div class="modal-content">
@@ -262,31 +273,43 @@ button:hover {
     
   </div>
   <div class="modal-footer">
-    <button onclick="page()">Export PDF</button>
+    <button onclick="page()">Export</button>
     <button>cancel</button>
   </div>
   </div>
-</div>&nbsp&nbsp&nbsp
+</div>
+&nbsp&nbsp&nbsp
 
 </div> 
 </div>
-
 <script>
-  function printpage(option)
-    {
-      if (option === 'print')
-      {
-   window.print();
+document.getElementById('printdrop').addEventListener('change', function() {
+    const selectedOption = this.value;
+    if (selectedOption === 'print') {
+        printPageContent();
     }
-  }
-  
-</script>
-<script>
-  // function page(){
-  //   window.print();
-  // }
+});
+
+function printPageContent() {
+    const contentToPrint = document.getElementById('contentToExport');
+    const clonedContent = contentToPrint.cloneNode(true);
+
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.body.appendChild(clonedContent);
+    printWindow.print();
+    printWindow.close();
+}
 </script>
 
+<!-- <script>
+  function printpage(option){
+    if (option === 'print'){
+      window.print();
+    }
+   
+  }
+  </script> -->
 <script>
   $(function() {
   
@@ -317,53 +340,82 @@ button:hover {
 
 <script>
 
-  $(document).ready(function() {
-      $("#exportDropdown").change(function() {
-          var selectedOption = $(this).val();
-          $(".modal").hide();
-          
-          if (selectedOption === "pdf") {
-              $("#pdfModal").show();
-          } 
-         
-          else if(selectedOption === "xls")
-          {
-            $("#xlsModal").show();
-          }
-          else if(selectedOption === "xlsx")
-          {
-            $("#xlsxModal").show();
-          }
-          else if(selectedOption === "zoho")
-          {
-            $("#zohoModal").show();
-          }
-      });
-  
-      // Close modal when the close button is clicked
-      $(".close").click(function() {
-          $(this).closest(".modal").hide();
-      });
-  });
-  </script>
+$(document).ready(function() {
+    $("#exportDropdown").change(function() {
+        var selectedOption = $(this).val();
+        $(".modal").hide();
+        
+        if (selectedOption === "pdf") {
+            $("#pdfModal").show();
+        } 
+      
+        else if(selectedOption === "xls")
+        {
+          $("#xlsModal").show();
+        }
+        else if(selectedOption === "xlsx")
+        {
+          $("#xlsxModal").show();
+        }
+        else if(selectedOption === "zoho")
+        {
+          $("#zohoModal").show();
+        }
+    });
+
+    // Close modal when the close button is clicked
+    $(".close").click(function() {
+        $(this).closest(".modal").hide();
+    });
+    
+
+});
+</script>
 
 <script>
   document.querySelector('.button_ex').addEventListener('click', function () {
     const element = document.getElementById('contentToExport'); 
-    const availablewidth =300;
-    const numberofcolumn =8;
-    const column=availablewidth/numberofcolumn;
+  
    
     const pdfOptions = {
       margin: 10,
-      filename: 'inventory_valuation.pdf',
+      filename: 'inventory_Valuation.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 4 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait',tablewidth:availablewidth * numberofcolumn },
+      html2canvas: { scale:1  },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
-    html2pdf().from(element).set(pdfOptions).set(column).save();
-  });
+    html2pdf().from(element).set(pdfOptions).save();
+  }); 
 </script>
+<script>
+// Function to convert a table to a worksheet object
+function tableToWorksheet(table) {
+  var ws = XLSX.utils.table_to_sheet(table);
+  return ws;
+}
 
+// Function to download an Excel file
+function downloadExcelFile(ws, filename) {
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, filename);
+}
+
+// Export button click event for XLS format
+document.querySelector('.xlsExportButton').addEventListener('click', function () {
+  var contentToExport = document.getElementById('myTable');
+  var worksheet = tableToWorksheet(contentToExport);
+  downloadExcelFile(worksheet, 'inventory_valuation.xls');
+});
+
+// Export button click event for XLSX format
+document.querySelector('.xlsxExportButton').addEventListener('click', function () {
+  var contentToExport = document.getElementById('myTable');
+  var worksheet = tableToWorksheet(contentToExport);
+  downloadExcelFile(worksheet, 'inventory_valuation.xlsx');
+});
+
+
+</script>
 {% endblock %}

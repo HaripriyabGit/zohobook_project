@@ -4,6 +4,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
 
 <style>
   
@@ -50,6 +51,7 @@ thead {
     .no-page-break {
         page-break-inside: avoid;
         display: none;
+      
     }
 }
 
@@ -108,6 +110,7 @@ button:hover {
     font-size: 24px;
     margin-right: 5px;
 }
+
 </style>
 
 
@@ -128,7 +131,7 @@ button:hover {
         <i class="fa fa-gear" style="font-size:1.5vw;padding-left:300px ;"></i><a href="{% url 'custom_repot' %}">Custom Report</a>
         
          <i class="fas fa-print " style="color:white;margin-left:550px ;height:3vh ;"></i>
-        <select name="flter_tp" id="" style="width: 1vw;color:black;"  onchange="printpage(this.value)">
+        <select name="printdrop" id="printdrop" style="width: 1vw;color:black;"  onchange="printpage(this.value)">
             <option value=""></option>
             <option value="print" >Print Preference</option>
            
@@ -150,17 +153,18 @@ button:hover {
 
    
         <div class="row">
-           <div style="padding-left: 44%;"><h4>Zylker</h4></div>
+           <div style="padding-left: 40%;"><h4 style="color:grey;
+            ">Zylker</h4></div>
 
-           <div ><a class="text-white" style="font-size: 2rem; padding-left: 35%;white-space: nowrap;">Inventory Summary </a></div>
-                  <div style="padding-left: 40%;"><h5>As of 15 August 2023</h5></div>
+           <div ><a class="text-secondary" style="font-size: 2rem; padding-left: 30%;white-space: nowrap;color: #333;">Inventory Summary </a></div>
+                  <div style="padding-left: 35%;color: grey;"><h5>As of 15 August 2023</h5></div>
             </div>
         </div>   
     
         <div class="row" >
-            <div class="col-sm-12 col-md-11 col-lg-11">
+            <div class="col">
               <div class="table-resposive">
-                <table class="table  text-white" id="myTable" style="width: 100px;padding-right:10px; ;">
+                <table class="table  text-white" id="myTable" style="width: 100%;">
                     <thead>
                         <tr>
                             <th colspan="5"></th>
@@ -255,12 +259,12 @@ button:hover {
       
     </div>
     <div class="modal-footer">
-      <button class="xlsbtn">Export</button>
+      <button class="xlsExportButton" id="xlsExportButton">Export</button>
       <button>cancel</button>
     </div>
   </div>
 </div>
-</div>
+
 
 <div id="xlsxModal" class="modal">
   <div class="modal-content">
@@ -275,12 +279,12 @@ button:hover {
       
     </div>
     <div class="modal-footer">
-      <button onclick="page()">Export</button>
+      <button class="xlsxExportButton" >Export</button>
       <button>cancel</button>
     </div>
   </div>
 </div>
-</div>
+
 
 <div id="zohoModal" class="modal">
   <div class="modal-content">
@@ -295,25 +299,39 @@ button:hover {
     <button>cancel</button>
   </div>
   </div>
-</div>&nbsp&nbsp&nbsp
+</div>
+&nbsp&nbsp&nbsp
 
 </div> 
 </div>
 <script>
-  // function page()
-  // {
-  //   window.print();
-  // }
+document.getElementById('printdrop').addEventListener('change', function() {
+    const selectedOption = this.value;
+    if (selectedOption === 'print') {
+        printPageContent();
+    }
+});
+
+function printPageContent() {
+    const contentToPrint = document.getElementById('contentToExport');
+    const clonedContent = contentToPrint.cloneNode(true);
+
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.body.appendChild(clonedContent);
+    printWindow.print();
+    printWindow.close();
+}
 </script>
 
-<script>
+<!-- <script>
   function printpage(option){
     if (option === 'print'){
       window.print();
     }
    
   }
-  </script>
+  </script> -->
 <script>
   $(function() {
   
@@ -379,22 +397,47 @@ $(document).ready(function() {
 <script>
   document.querySelector('.button_ex').addEventListener('click', function () {
     const element = document.getElementById('contentToExport'); 
-    const availablewidth =300;
-    const numberofcolumn =8;
-    const column=availablewidth/numberofcolumn;
+  
    
     const pdfOptions = {
       margin: 10,
       filename: 'inventory.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 4 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait',tablewidth:availablewidth * numberofcolumn },
+      html2canvas: { scale:10  },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'Landscape' },
     };
 
     html2pdf().from(element).set(pdfOptions).save();
-  });
+  }); 
 </script>
+<script>
+// Function to convert a table to a worksheet object
+function tableToWorksheet(table) {
+  var ws = XLSX.utils.table_to_sheet(table);
+  return ws;
+}
+
+// Function to download an Excel file
+function downloadExcelFile(ws, filename) {
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, filename);
+}
+
+// Export button click event for XLS format
+document.querySelector('.xlsExportButton').addEventListener('click', function () {
+  var contentToExport = document.getElementById('myTable');
+  var worksheet = tableToWorksheet(contentToExport);
+  downloadExcelFile(worksheet, 'inventory_summary.xls');
+});
+
+// Export button click event for XLSX format
+document.querySelector('.xlsxExportButton').addEventListener('click', function () {
+  var contentToExport = document.getElementById('myTable');
+  var worksheet = tableToWorksheet(contentToExport);
+  downloadExcelFile(worksheet, 'inventory_summary.xlsx');
+});
 
 
-
+</script>
 {% endblock %}
