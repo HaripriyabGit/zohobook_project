@@ -6879,7 +6879,8 @@ def report_view(request):
     return render(request,'reports.html')
 
 def inventory_summary(request):
-    return render(request,'inventory_summary.html')
+    company = company_details.objects.get(user=request.user)
+    return render(request,'inventory_summary.html',{'company':company})
 
 def custom_repot(request):
     item = AddItem.objects.all()
