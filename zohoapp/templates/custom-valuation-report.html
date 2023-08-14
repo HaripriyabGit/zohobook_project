@@ -79,7 +79,7 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
     }
 </script>-->
 
-<div class="row">
+<div class="row" style="position: fixed;">
     <div class="col-sm-12 " >
       <h1 style="position: fixed;top:100px;" >
         CUSTOMIZE REPORTS
@@ -117,8 +117,7 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
                  
                     {% for i in items%}
                     <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
-                    <option class="row d-flex justify-content-left mt-90" >item2<option>
-                      <option class="row d-flex justify-content-left mt-90" >product<option>
+                    
                  {%endfor%}
                 </select>
             </div>
@@ -159,11 +158,11 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
                         <p style="white-space: nowrap;font-size: medium;">Use advanance fiter to filter the report based on the field of</p>
                         <div class="form-row pt-2">
                           <select class="option-select" style="width: 15vw;color: black; height: 5vh;" >
-                 
+                           <option value="" hidden>select</option>
                             {% for i in items%}
-                            <option value="" hidden>select</option>
+                           
                             <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
-                            <option value="">item2</option>
+                          
                          {%endfor%}
                         </select>
                           &nbsp  &nbsp

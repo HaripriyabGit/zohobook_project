@@ -27,13 +27,13 @@ table {
   border-collapse: collapse;
   margin-top: 20px;
   color: #333;
-  margin-left:5px ;
+
 }
 
-th, td {
+th, td,tr {
   padding: 10px;
   text-align: center;
-
+ border: 1px solid #333;
 }
 
 thead {
@@ -116,17 +116,34 @@ button {
 #nav{
   border:1px solid ;
   border-radius:5px ;
-  top:3px
+  top:3px;
+  background-color:white ;
 }
-      
-       
+/* Position the dropdown icon */
+.custom-caret {
+    position: absolute;
+    right: 10px; /* Adjust the value as needed */
+    top: 50%; /* Adjust the value as needed */
+    transform: translateY(-10%);
+    font-size: 15px; /* Adjust the font size as needed */
+}
+
+
+.custom-caret i {
+    color: white; /* Adjust the color as needed */
+    cursor: pointer; /* Add cursor pointer */
+}  
+td{
+  text-align: center;
+  
+}
        
 </style>
 
 
 
  <br> 
- <div class="container-fulid">
+ <div class="container-fulid" style="position: fixed;">
  <nav class="nav nav-pills navbar-expand-lg navbar-light " id="navabars">
   <!-- Navbar brand or logo -->
   <a class="navbar-brand" href="#"></a>
@@ -136,9 +153,10 @@ button {
       <ul class="navbar-nav">
           <li class="nav-item" id="nav">
               <!-- Date range selection -->
-              <div class="collapse navbar-collapse" id="reportrange" style=" color: white;  width: 10vw;white-space: nowrap;">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <span></span> <i class="fa fa-caret-down"></i>
+              <div class="nav-item dropdown" id="reportrange" style=" color: black;  width: 10vw;white-space: nowrap;font-weight: bolder;">
+                <i class="fa fa-calendar"style=" transform: translateY(50%);"></i>&nbsp;
+                
+                <span class="custom-caret"> <i class="fa fa-caret-down"></i></span>
               </div>
           </li>
           <li class="nav-item">
@@ -165,19 +183,19 @@ button {
       <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('pdf')" >PDF</a></li>
       <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('xls')"  >XLS (Microsoft Excel 1997-2004 Compatible)</a></li>
 <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('xlsx')">XLSX (Microsoft Excel )</a></li>
-<li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('zoho')" >Export to Zoho sheet</a></li>
+
     </ul>
   </li> 
 
            <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger" style="height:35px ;"> 
+            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn " style="height:35px ;"> 
        
            </li>
       </ul>
   </div>
 </nav>
 </div>
-<br><br><br>
+<br><br><br><br><br>
 <div id="contentToExport">
   <div  style="top: 7rem; " >
 
@@ -197,49 +215,50 @@ button {
             <div class="col">
               <div class="table-resposive">
                 <table class="table  text-white" id="myTable" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th colspan="5"></th>
-                            <th colspan="3" style="text-align: center;">STOCK DETAILS</th>
+                    <thead >
+                        <tr class="table" >
+                            <th colspan="5" ></th>
+                            <th colspan="3"class="table" style="text-align: center;">STOCK DETAILS</th>
                          
                            
                       
                           
                         </tr>
-                      <tr>
-                        <th>ITEM NAME</th>
-                        <th>SKU</th>
+                      <tr class="table" >
+                        <th class="table">ITEM NAME</th>
+                        <th class="table">SKU</th>
                      
-                        <th>QUANTITY ORDERED</th>
-                        <th>QUANTITY IN</th>
-                        <th>QUANTITY OUT</th>
+                        <th class="table">QUANTITY ORDERED</th>
+                        <th class="table">QUANTITY IN</th>
+                        <th class="table">QUANTITY OUT</th>
                         
                       
-                        <th >STOCK ON HAND</th>
-                        <th>COMMITTED STOCK</th>
-                        <th>AVAILABLE FOR SALE</th>
+                        <th class="table">STOCK ON HAND</th>
+                        <th class="table">COMMITTED STOCK</th>
+                        <th class="table">AVAILABLE FOR SALE</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table">
                      
-             
+                      {% for i in item %}
                       <tr id="over">
-             
+                      
                      
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="table">{{i.Name}}</td>
+                        
+                        <td class="table"></td>
+                        <td class="table"></td>
+                        <td class="table"></td>
 
-                        <td ></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="table"></td>
+                        <td class="table"></td>
+                        <td class="table"></td>
+                        <td class="table"></td>
 
         
                        
                       </tr>
-                 
+                      {% endfor %}
                     </tbody>
                 </table>
               </div>
@@ -270,7 +289,7 @@ button {
       <a href="" onclick="page()">customize pdf</a>
     </div>
     <div class="modal-footer">
-      <button onclick="convertToPDF()" class="button_ex">Export</button>
+      <button onclick="convertToPDF()" class="button_ex">PDF</button>
       <button>cancel</button>
     </div>
   </div>
@@ -318,20 +337,7 @@ button {
 </div>
 
 
-<div id="zohoModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-  <div class="modal-body" >
-    <span class="warning-icon">&#9888;</span>
-    <p  style="color: black;font-size: medium;">This report will be exported and saved in Zoho Sheet under your account. Are you sure you want to export this report to Zoho Sheet?</p>
-    
-  </div>
-  <div class="modal-footer">
-    <button onclick="page()">Export</button>
-    <button>cancel</button>
-  </div>
-  </div>
-</div>
+
 &nbsp&nbsp&nbsp
 
 </div> 
@@ -343,10 +349,15 @@ button {
 
     // Find all the elements with the class "text" within the cloned content
     const textElements = clonedContent.querySelectorAll('.text');
+    const tableElements = clonedContent.querySelectorAll('.table');
 
     // Set the text color to black for each element with the class "text"
     textElements.forEach(element => {
       element.style.color = '#000000';  // Text color (black)
+    });
+    tableElements.forEach(element => {
+      element.style.color = '#000000';
+      element.style.border ='1px solid'  // Text color (black)
     });
 
     // Print the cloned content
@@ -383,7 +394,7 @@ button {
            'Previous Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
            'Previous Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
            'Previous Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-           
+          //'Custom':[moment(),moment()]
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
@@ -394,19 +405,26 @@ button {
         
 
     },cb, function(start, end, label) {
-      if (label === 'Custom') {
-            // Show the calendar only when "Custom" range is selected
-            $(this.element).data('daterangepicker').show();
+        if (label === 'Custom') {
+            $('#reportrange').data('daterangepicker').show();
         } else {
-        // Update the <h5> tag when a new date range is selected
-        $('#selectedEndDate').text('As of'+'  '+ end.format('MMMM D, YYYY'));
+            $('#reportrange').data('daterangepicker').hide();
         }
+      
+        $('#selectedEndDate').text('As of'+'  '+ end.format('MMMM D, YYYY'));
+        
     });
-  
+    $('.custom-caret i').click(function() {
+        $('#reportrange').data('daterangepicker').toggle();
+    });
+    
+   
 
     cb(start, end,'Today');
+ 
+    });
   
-  });
+  
   </script>
 
 <script>
@@ -419,9 +437,7 @@ button {
           $("#xlsModal").show();
       } else if (option === "xlsx") {
           $("#xlsxModal").show();
-      } else if (option === "zoho") {
-          $("#zohoModal").show();
-      }
+      } 
   }
 
   // Close modal when the close button is clicked
@@ -439,7 +455,7 @@ button {
       margin: 10,
       filename: 'inventory.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale:10  },
+      html2canvas: { scale:1  },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'Landscape' },
     };
 

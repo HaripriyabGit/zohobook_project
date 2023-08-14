@@ -1,4 +1,4 @@
-{% extends 'base3.html' %}
+{% extends 'base.html' %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -137,7 +137,7 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
            
                 {% for i in items%}
                 <option class="row d-flex justify-content-left mt-90" >{{ i.Name }}</option>
-                <option class="row d-flex justify-content-left mt-90" >item2<option>
+                
              {%endfor%}
             </select>
         </div>
