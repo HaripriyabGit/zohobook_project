@@ -53,7 +53,9 @@ thead {
         display: none;
       
     }
+  
 }
+
 
 .modal {
     display: none;
@@ -134,7 +136,14 @@ button {
     color: white; /* Adjust the color as needed */
     cursor: pointer; /* Add cursor pointer */
 }  
-       
+.td th, td,tr {
+  padding: 10px;
+  text-align: center;
+ border: 1px solid #333;
+}
+h2,h4,h5{
+  color: white;
+}      
 </style>
 
 
@@ -158,8 +167,8 @@ button {
           </li>
           <li class="nav-item">
               <!-- Custom report link -->
-              <a class="nav-link" href="{% url 'custom_valuation_repot' %}" style="color: #0056b3;white-space: nowrap;">
-                  <i class="fa fa-gear" style="color: white;" ></i>
+              <a class="nav-link" href="{% url 'custom_valuation_repot' %}" style="color:white ;white-space: nowrap;">
+                  <i class="fa fa-gear" style="color: #0056b3;" ></i>
                   Custom Report
               </a>
           </li>
@@ -168,7 +177,7 @@ button {
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="background: white; color: black;"><i class="fa fa-print"></i></a>
     <ul class="dropdown-menu dropdown-menu-end">
       <li>
-        <a class="printdrop" href="#" onclick="printPageContent()" style="font-size:18px;top: 2%;">Print Preference</a></li>
+        <a class="printdrop" href="#" onclick="printPageContent()" style="font-size:16px;top: 2%;">Print Preference</a></li>
     </ul>
   </li>
 
@@ -180,12 +189,12 @@ button {
       <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('pdf')" >PDF</a></li>
       <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('xls')"  >XLS (Microsoft Excel 1997-2004 Compatible)</a></li>
 <li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('xlsx')">XLSX (Microsoft Excel )</a></li>
-<li><a class="dropdown-item" style="font-size:15px;" onclick="exportAs('zoho')" >Export to Zoho sheet</a></li>
+
     </ul>
   </li> 
 
            <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-danger" style="height:35px ;"> 
+            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="height:35px ;font-size: 25px;"> 
        
            </li>
       </ul>
@@ -197,13 +206,16 @@ button {
   <div  style="top: 7rem; " >
 
    <center>
-        <div class="row">
-          {%if company %}
-           <div  ><h4 class="text" style="color:white;
-            ">{{company.company_name }}</h4></div>
-           {% endif %}
-           <div ><a class="text" style="font-size: 2rem; white-space: nowrap;color: white;">Inventory Valuation Summary </a></div>
-                  <h5 id="selectedEndDate"></h5>
+    <div class="row">
+      {% if company.company_name != None %}
+       <div  ><h4 class="text text-danger " 
+        >{{company.company_name }}</h4>
+        {% else %}
+         Add Company
+        </div>
+        {% endif %}
+           <div ><a class="text text-primary" style="font-size: 2rem; white-space: nowrap;">Inventory Valuation Summary </a></div>
+                  <h5 id="selectedEndDate" class="text text-danger"></h5>
             </div>
         </div>   
       </center><br><br>
@@ -211,33 +223,47 @@ button {
         <div class="row" >
             <div class="col">
               <div class="table-resposive">
-                <table class="table  text-white" id="myTable" style="width: 100%;">
-                    <thead>
+                <table class="table" id="myTable" style="width: 100%;">
+                    <thead class="td">
                       
-                      <tr>
-                        <th>ITEM NAME</th>
-                        <th>SKU</th>
-                        <th >STOCK ON HAND</th>
-                        <th>INVENTORY ASSET VALUE</th>
+                      <tr class="td">
+                        <th class="td" >ITEM NAME</th>
+                        <th class="td">SKU</th>
+                        <th class="td">STOCK ON HAND</th>
+                        <th class="td">INVENTORY ASSET VALUE</th>
                     
                       </tr>
+                     
                     </thead>
                     <tbody>
                      
-             
-                      <tr id="over">
+                      {% for i in item %}
+                      <tr id="over" class="table">
              
                      
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="td">{{i.Name}}</td>
+                        <td class="td"></td>
+                        <td class="td"></td>
+                        <td class="td"colspan=3></td>
+                        
 
                       </tr>
+                
+                 {% endfor %}
                  
                     </tbody>
+                    <th class="td">Total</th> 
+                    <td class="td"></td>
+                    <td class="td"></td>
                 </table>
-              </div>
+           
+            
+              
+             
+              </div><br>
+                <p>**Amount is displayed in your base currency <span style="background-color: green;">INR</span></p>
+              <p>***Only items having stock or transactions are displayed</p>
+            
                 <br><br><br>
             </div>
       
@@ -262,10 +288,10 @@ button {
     <div class="modal-body" >
       <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
       <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
-      <a href="" onclick="page()">customize pdf</a>
+      
     </div>
     <div class="modal-footer">
-      <button onclick="convertToPDF()" class="button_ex">Export</button>
+      <button onclick="convertToPDF()" class="button_ex">PDF</button>
       <button>cancel</button>
     </div>
   </div>
@@ -313,20 +339,7 @@ button {
 </div>
 
 
-<div id="zohoModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-  <div class="modal-body" >
-    <span class="warning-icon">&#9888;</span>
-    <p  style="color: black;font-size: medium;">This report will be exported and saved in Zoho Sheet under your account. Are you sure you want to export this report to Zoho Sheet?</p>
-    
-  </div>
-  <div class="modal-footer">
-    <button onclick="page()">Export</button>
-    <button>cancel</button>
-  </div>
-  </div>
-</div>
+
 &nbsp&nbsp&nbsp
 
 </div> 
@@ -338,12 +351,18 @@ button {
 
     // Find all the elements with the class "text" within the cloned content
     const textElements = clonedContent.querySelectorAll('.text');
+    const tableElements = clonedContent.querySelectorAll('.table,td');
+
 
     // Set the text color to black for each element with the class "text"
     textElements.forEach(element => {
       element.style.color = '#000000';  // Text color (black)
     });
-
+    tableElements.forEach(element => {
+      element.style.color = '#000000';
+      element.style.border ='1px solid';
+      
+    });
     // Print the cloned content
     const printWindow = window.open('', '_blank');
     printWindow.document.body.appendChild(clonedContent);
@@ -382,7 +401,7 @@ button {
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
-        singleDatePicker:true,
+       // singleDatePicker:true,
         showDropdowns:true,
         alwaysShowCalanders:false,
         linkedCalenders:false,
@@ -400,7 +419,7 @@ button {
     });
 
 
-    cb(start, end,'Today');
+    cb(start, end,'Custom');
   
   });
   </script>
@@ -432,10 +451,10 @@ button {
   
    
     const pdfOptions = {
-      margin: 10,
-      filename: 'inventory_valuation_summary.pdf',
+      margin: 1,
+      filename: '{{company.company_name}}.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale:10  },
+      html2canvas: { scale:1 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'Landscape' },
     };
 
@@ -460,14 +479,14 @@ function downloadExcelFile(ws, filename) {
 document.querySelector('.xlsExportButton').addEventListener('click', function () {
   var contentToExport = document.getElementById('myTable');
   var worksheet = tableToWorksheet(contentToExport);
-  downloadExcelFile(worksheet, 'inventory_valuation_summary.xls');
+  downloadExcelFile(worksheet, '{{company.company_name}}.xls');
 });
 
 // Export button click event for XLSX format
 document.querySelector('.xlsxExportButton').addEventListener('click', function () {
   var contentToExport = document.getElementById('myTable');
   var worksheet = tableToWorksheet(contentToExport);
-  downloadExcelFile(worksheet, 'inventory_valuation_summary.xlsx');
+  downloadExcelFile(worksheet, '{{company.company_name}}.xlsx');
 });
 
 

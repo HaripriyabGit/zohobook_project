@@ -6876,7 +6876,8 @@ def payment_delete_details(request):
 ###########Report############
 
 def report_view(request):
-    return render(request,'reports.html')
+    company = company_details.objects.get(user=request.user)
+    return render(request,'reports.html',{'company':company})
 
 def inventory_summary(request):
     company = company_details.objects.get(user=request.user)
@@ -6884,21 +6885,26 @@ def inventory_summary(request):
     return render(request,'inventory_summary.html',{'company':company,'item':item})
 
 def custom_repot(request):
+    company = company_details.objects.get(user=request.user)
     item = AddItem.objects.all()
-    return render(request,'custom_report_inventory.html',{'items':item})
+    return render(request,'custom_report_inventory.html',{'company':company,'items':item})
 
 def inventory_Valuation_summary(request):
     company = company_details.objects.get(user=request.user)
-    return render(request,'inventory-valuation.html',{'company':company})
+    item = AddItem.objects.all()
+    return render(request,'inventory-valuation.html',{'company':company,'item':item})
 
 
 def custom_valuation_repot(request):
+    company = company_details.objects.get(user=request.user)
     item = AddItem.objects.all()
-    return render(request,'custom-valuation-report.html',{'items':item})
+    return render(request,'custom-valuation-report.html',{'company':company,'items':item})
 
 
 def show_hide(request):
-    return render(request,'show_hide.html')
+    company = company_details.objects.get(user=request.user)
+    return render(request,'show_hide.html',{'company':company})
 
 def general(request):
-    return render(request,'custom-valuation-report.html')
+    company = company_details.objects.get(user=request.user)
+    return render(request,'custom-valuation-report.html',{'company':company})

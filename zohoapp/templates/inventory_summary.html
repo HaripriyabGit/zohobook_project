@@ -116,7 +116,7 @@ button {
 #nav{
   border:1px solid ;
   border-radius:5px ;
-  top:3px;
+  top:1px;
   background-color:white ;
 }
 /* Position the dropdown icon */
@@ -161,8 +161,8 @@ td{
           </li>
           <li class="nav-item">
               <!-- Custom report link -->
-              <a class="nav-link" href="{% url 'custom_repot' %}" style="color: #0056b3;white-space: nowrap;">
-                  <i class="fa fa-gear" style="color: white;" ></i>
+              <a class="nav-link" href="{% url 'custom_repot' %}" style="color: white;white-space: nowrap;">
+                  <i class="fa fa-gear" style="color: #0056b3;" ></i>
                   Custom Report
               </a>
           </li>
@@ -171,7 +171,7 @@ td{
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="background: white; color: black;"><i class="fa fa-print"></i></a>
     <ul class="dropdown-menu dropdown-menu-end">
       <li>
-        <a class="printdrop" href="#" onclick="printPageContent()" style="font-size:18px;top: 2%;">Print Preference</a></li>
+        <a class="printdrop" href="#" onclick="printPageContent()" style="font-size:16px;top: 2%;">Print Preference</a></li>
     </ul>
   </li>
 
@@ -188,7 +188,7 @@ td{
   </li> 
 
            <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn " style="height:35px ;"> 
+            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 25px;"> 
        
            </li>
       </ul>
@@ -201,12 +201,15 @@ td{
 
    <center>
         <div class="row">
-          {%if company %}
-           <div  ><h4 class="text" style="color:white;
-            ">{{company.company_name }}</h4></div>
-           {% endif %}
-           <div ><a class="text" style="font-size: 2rem; white-space: nowrap;color: white;">Inventory Summary </a></div>
-                  <h5 id="selectedEndDate"></h5>
+          {% if company.company_name != None %}
+           <div  ><h4 class="text text-danger" 
+            >{{company.company_name }}</h4>
+            {% else %}
+             Add Company
+            </div>
+            {% endif %}
+           <div ><a class="text text-primary" style="font-size: 2rem; white-space: nowrap;color: white;"><h2>Inventory Summary </h2></a></div>
+                  <h5 class="text text-danger" id="selectedEndDate"></h5>
             </div>
         </div>   
       </center>
@@ -218,7 +221,7 @@ td{
                     <thead >
                         <tr class="table" >
                             <th colspan="5" ></th>
-                            <th colspan="3"class="table" style="text-align: center;">STOCK DETAILS</th>
+                            <th colspan="3" style="text-align: center;">STOCK DETAILS</th>
                          
                            
                       
@@ -281,16 +284,16 @@ td{
     <div class="modal-header" style="background-color: lightgray;margin-bottom:10% ;">
      
       <h2 style="color: black;font-size: larger;font-weight: bold;justify-content: right;">Export Report As PDF</h2>
-      <span class="close">&times;</span>
+      <span class="close" >&times;</span>
     </div>
     <div class="modal-body" >
       <p  style="color: black;font-size: medium;">You can protect the export report with a password to keep your data secure</p>
       <input type="checkbox" style="color: black;"><p style="color: black;font-size: medium;">I want to protect this file with password</p><br>
-      <a href="" onclick="page()">customize pdf</a>
+      
     </div>
     <div class="modal-footer">
-      <button onclick="convertToPDF()" class="button_ex">PDF</button>
-      <button>cancel</button>
+      <button onclick="exportAsPDF()" class="button_ex">PDF</button>
+      <button >cancel</button>
     </div>
   </div>
 </div>
@@ -357,7 +360,8 @@ td{
     });
     tableElements.forEach(element => {
       element.style.color = '#000000';
-      element.style.border ='1px solid'  // Text color (black)
+      element.style.border ='1px solid';
+      
     });
 
     // Print the cloned content
@@ -398,7 +402,7 @@ td{
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
-        singleDatePicker:true,
+        singleDatePicker:false,
         showDropdowns:true,
         alwaysShowCalanders:false,
         linkedCalenders:false,
@@ -420,7 +424,7 @@ td{
     
    
 
-    cb(start, end,'Today');
+    cb(start, end,'Custom');
  
     });
   
@@ -445,23 +449,55 @@ td{
       $(this).closest(".modal").hide();
   });
 </script>
-
 <script>
+function exportAsPDF() {
+  const container = document.getElementById('contentToExport');
+
+  // Apply styling changes to the container's content
+  const textWhiteElements = container.querySelectorAll('.text');
+  textWhiteElements.forEach(element => {
+    element.style.color = '#000000'; // Set text color to black
+  });
+
+  
+
+  const pdfOptions = {
+    margin: 0,
+    filename: '{{company.company_name}}.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' },
+  };
+
+  // Generate PDF from the container
+  html2pdf().from(container).set(pdfOptions).save();
+  
+}
+textWhiteElements.forEach(element => {
+    element.style.color = 'white'; // Set text color to black
+  });
+</script>
+<!-- <script>
   document.querySelector('.button_ex').addEventListener('click', function () {
     const element = document.getElementById('contentToExport'); 
-  
+     
    
     const pdfOptions = {
-      margin: 10,
+      margin: 1,
       filename: 'inventory.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale:1  },
+      
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'Landscape' },
     };
+    
+     html2pdf().from(element).set(pdfOptions).save();
+    
+   
 
-    html2pdf().from(element).set(pdfOptions).save();
+   
   }); 
-</script>
+</script> -->
 <script>
 // Function to convert a table to a worksheet object
 function tableToWorksheet(table) {
@@ -480,14 +516,14 @@ function downloadExcelFile(ws, filename) {
 document.querySelector('.xlsExportButton').addEventListener('click', function () {
   var contentToExport = document.getElementById('myTable');
   var worksheet = tableToWorksheet(contentToExport);
-  downloadExcelFile(worksheet, 'inventory_summary.xls');
+  downloadExcelFile(worksheet, '{{company.company_name}}.xls');
 });
 
 // Export button click event for XLSX format
 document.querySelector('.xlsxExportButton').addEventListener('click', function () {
   var contentToExport = document.getElementById('myTable');
   var worksheet = tableToWorksheet(contentToExport);
-  downloadExcelFile(worksheet, 'inventory_summary.xlsx');
+  downloadExcelFile(worksheet, '{{company.company_name}}.xlsx');
 });
 
 
