@@ -188,7 +188,7 @@ td{
   </li> 
 
            <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 25px;"> 
+            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 20px;"> 
        
            </li>
       </ul>
@@ -203,9 +203,9 @@ td{
         <div class="row">
           {% if company.company_name != None %}
            <div  ><h4 class="text text-danger" 
-            >{{company.company_name }}</h4>
+            >{{company.company_name }}
             {% else %}
-             Add Company
+             Add Company</h4>
             </div>
             {% endif %}
            <div ><a class="text text-primary" style="font-size: 2rem; white-space: nowrap;color: white;"><h2>Inventory Summary </h2></a></div>
@@ -398,26 +398,17 @@ td{
            'Previous Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
            'Previous Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
            'Previous Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-          //'Custom':[moment(),moment()]
+           //'Custom':[moment(),moment()]
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
-        singleDatePicker:false,
+        singleDatePicker:true,
         showDropdowns:true,
-        alwaysShowCalanders:false,
         linkedCalenders:false,
+
         
 
-    },cb, function(start, end, label) {
-        if (label === 'Custom') {
-            $('#reportrange').data('daterangepicker').show();
-        } else {
-            $('#reportrange').data('daterangepicker').hide();
-        }
-      
-        $('#selectedEndDate').text('As of'+'  '+ end.format('MMMM D, YYYY'));
-        
-    });
+    },cb);
     $('.custom-caret i').click(function() {
         $('#reportrange').data('daterangepicker').toggle();
     });
