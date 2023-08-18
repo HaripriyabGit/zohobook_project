@@ -137,6 +137,14 @@ td{
   text-align: center;
   
 }
+.cancel-button {
+      background-color: #333; /* Change the background color */
+      color: white; /* Change the text color */
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }   
        
 </style>
 
@@ -385,7 +393,7 @@ td{
       }
       
   
-    $('#reportrange').daterangepicker({
+      var daterangepickerOptions ={
         startDate: start,
         endDate: end,
         ranges: {
@@ -402,24 +410,38 @@ td{
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
-        singleDatePicker:true,
+        //singleDatePicker:true,
         showDropdowns:true,
         linkedCalenders:false,
+        showCancel:true,
+        cancelClass: 'cancel-button',
+        maxSpan:{days:30}
 
         
 
-    },cb);
+    };
+    $('#reportrange').daterangepicker(daterangepickerOptions, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    if (picker.chosenLabel === 'Custom') {
+        $('#selectedEndDate').text('As of ' + picker.endDate.format('MMMM D, YYYY'));
+    }
+});
+
     $('.custom-caret i').click(function() {
         $('#reportrange').data('daterangepicker').toggle();
     });
-    
-   
-
-    cb(start, end,'Custom');
- 
+    $('.cancel-button').click(function() {
+        $('#reportrange').data('daterangepicker').setStartDate(start);
+        $('#reportrange').data('daterangepicker').setEndDate(end);
     });
-  
-  
+   
+   
+    $('.drp-calendar.right').remove();
+
+
+    cb(start, end, 'Custom');
+  });
   </script>
 
 <script>

@@ -78,25 +78,23 @@ background: linear-gradient(to right, #0083B0, #00B4DB);
         selectedForm.style.display = "block";
     }
 </script>-->
+<ul class="nav nav-pills"style="position: fixed;" >
+  
 
-<div class="row" style="position: fixed;">
-    <div class="col-sm-12 " >
-      <h1 style="position: fixed;top:100px;" >
-        CUSTOMIZE REPORTS
-      
-      
+  <a class="navbar-brand me-auto " href="#" style="font-size:25px;color: white;position: fixed;">Customize Report</a>
 
-        <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="margin-left:840px;font-size: 20px;"> 
-    </h1>
-    </div>
-</div>
+  <li class="nav-item" style="height:4vh; width:80vw;">
+    <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent"
+                   style="margin-left:1200px ;font-size: 20px;position: fixed;">
+  </li>
+</ul>
 
 <br><br><br><br>
 
 <div class="container">
     <div class="sidebars">
-        <h4 style="color:  white;position: fixed;"><a href="#" >General</a></h4>
-        <h4 style="color:  white;position: fixed;top:40%"><a href="{% url 'show_hide' %}" style="color: #333;">show/hide columns</a></h4>
+        <h4 style="color:  white;position: fixed;"><a href="#" style="color: #333;" >General</a></h4>
+        <h4 style="color:  white;position: fixed;top:40%"><a href="{% url 'show_hide' %}">show/hide columns</a></h4>
         
     </div>
     </div>

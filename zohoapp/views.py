@@ -6875,9 +6875,9 @@ def payment_delete_details(request):
 
 ###########Report############
 
-def report_view(request):
+def report_inventory_view(request):
     company = company_details.objects.get(user=request.user)
-    return render(request,'reports.html',{'company':company})
+    return render(request,'reports_inventory.html',{'company':company})
 
 def inventory_summary(request):
     company = company_details.objects.get(user=request.user)

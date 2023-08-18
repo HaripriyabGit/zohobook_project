@@ -23,101 +23,98 @@
     
     margin-left:300px; ;
     width:30vw ;
-    bottom:5px;
+    bottom:15px;
 
   
 }
+.container-right {
+  width: 100vw;
+  height: 100vh;
+  flex: 80;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-group-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Columns and items styling */
+.container-inner {
+  display: flex;
+  width: 45vw ;
+  padding-left: 40px;
+}
+
+.column {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 0 10px;
+  flex: 1;
+  height: 500px; 
+  overflow-y: auto;
+}
 
 
-    #container2 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: transparent;
-      
+.search-bar {
+  position: relative;
+}
+
+.search-input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.item-list {
+  list-style: none;
+  margin-top: 10px;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+.item:last-child {
+  border-bottom: none;
+}
+.add,
+.remove {
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+}
+.item:hover .add,
+.item:hover .remove {
+  display: inline-block;
+}
+
+.add {
+        background-color: #4caf50;
+        color: white;
+        margin-left: 10px;
     }
 
-    .column-card {
-        background-color: white;
-        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        padding: 20px;
-        margin: 10px;
-        overflow: hidden;
-        width:25vw ;
-      
-    }
-
-
-    .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .col-md-6 {
-        flex-basis: calc(50% - 20px); 
-        margin: 10px;
-    }
-
-
-
-
-    .column-title {
-        color: #333;
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-    }
-
-    .search-bar {
-        margin-bottom: 10px;
-    }
-
-    .search-input {
-        padding: 5px;
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .search-icon {
-        cursor: pointer;
-    }
-
-    .item-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        max-height: 300px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-    .item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 5px 0;
-        border-bottom: 1px solid #ccc;
-        color: black;
-    }
-
-    .add,
     .remove {
-        cursor: pointer;
-        color: #007bff;
-        font-weight: bold;
+        background-color: #f44336;
+        color: white;
     }
-
-    .add:hover,
-    .remove:hover {
-        color: #0056b3;
-    }
-
     .buttons {
         display: flex;
         justify-content: flex-end;
@@ -137,103 +134,69 @@
     .button.cancel-button {
         background-color: #ccc;
     }
-
-    /* Highlight the filtered items */
-    .highlight {
-        background-color: #ffffcc;
-    }
-    .item:hover .add,
-    .item:hover .remove {
-        display: inline-block;
-    }
-
-    .add,
-    .remove {
-        cursor: pointer;
-        padding: 5px 6px;
-        border-radius: 3px;
-        display: none;
-    }
-
-    .add {
-        background-color: #4caf50;
-        color: white;
-        margin-left: 10px;
-    }
-
-    .remove {
-        background-color: #f44336;
-        color: white;
-    }
    
 </style>
 
-<div class="row">
-    <div class="col-sm-12">
-        <h1 style="position: fixed;top:100px;">
-            CUSTOMIZE REPORTS
-            <input type="button" value="X" onclick="javascript:history.go(-2);" class="btn btn-tansperent"
-                   style="margin-left:840px ;font-size: 20px;">
-        </h1>
-    </div>
-</div>
+<ul class="nav nav-pills"style="position: fixed;" >
+  
+
+  <a class="navbar-brand me-auto " href="#" style="font-size:25px;color: white;position: fixed;">Customize Report</a>
+
+  <li class="nav-item" style="height:4vh; width:80vw;">
+    <input type="button" value="X" onclick="javascript:history.go(-2);" class="btn btn-tansperent"
+                   style="margin-left:1200px ;font-size: 20px;position: fixed;">
+  </li>
+</ul>
 
 <br><br><br><br>
 
 <div class="container">
     <div class="sidebars">
-        <h4 class="generalhead" style="color:  white;position: fixed;"><a href="{% url 'general' %}" style="color: #333;">General</a></h4>
-        <h4 style="color:  white;position: fixed;top:40%"><a href="#">show/hide columns</a></h4>
+        <h4 class="generalhead" style="color:  white;position: fixed;top:30% "><a href="{% url 'general' %}" >General</a></h4>
+        <h4 style="color:  white;position: fixed;top:35%"><a href="#" style="color: #333;">show/hide columns</a></h4>
     </div>
 </div>
-<h2 class="column-title" style="color: white; padding-left:350px ;margin-top:70px ;">Available Column &nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    &nbsp&nbsp&nbspSelected Column</h2>
+<h2 class="column-title" style="color: white; padding-left:350px ;top: 30%;">Available Column &nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp
+   Selected Column</h2>
 
 <form action="" class="forms">
-    <div class="container" id="container2" style="bottom:11%;" >
-        <div class="row">
-            <div class="col-md-6 column-card" id="originalColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc; position: relative;padding-right: 15px;">
-               
-                  
-                <div class="search-bar" >
-                     <i class=" search-icon fas fa-search" style="color: black;"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search items">
-                  
-                </div>
-                <ul class="item-list" >
-                    
-                 
-                    <li class="item"><span class="item-text">Sales price</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Created Time</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Last Modification Time</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Purchase Description</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Parchase Price</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Item End</span> <span class="add">+</span></li>
-                    <li class="item"><span class="item-text">Item start</span> <span class="add">+</span></li>
-                    
-                </ul>
-               
-            </div>
-            
-            <div class="col-md-6 column-card" id="addedColumn" style="height: auto; max-height:70vh;overflow-y:auto ;border: 1px solid #ccc;padding-left: 15px;">
-
-                <ul class="item-list" style="padding: 0;margin: 0;list-style: none; color: black;">
-                        
-                    <li class="item"><span class="item-text">Item type</span> <span class="remove">-</span></li>
-                
-                    <li class="item"><span class="item-text">Product type</span> <span class="remove">-</span></li>
-                    <li class="item"><span class="item-text">Status</span> <span class="remove">-</span></li>
-                    <li class="item"><span class="item-text">Usage Unit</span> <span class="remove">-</span></li>
-                    <li class="item"><span class="item-text">Sales Description</span> <span class="remove">-</span></li>
-              
-                </ul>
-            </div>
+  <div class="container-right">
+    <div class="container-inner">
+      <div class="column" id="originalColumn">
+       
+        <div class="search-bar">
+          <i class=" search-icon fas fa-search" style="color: black;"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search items">
         </div>
+        <ul class="item-list text-black">
+          <li class="item"><span class="item-text">SKU</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Item type</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Product type</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Status</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Usage Unit</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Sales Description</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Sales price</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Created Time</span> <span class="add">+</span></li>
+          <li class="item"><span class="item-text">Last Modified Time</span> <span class="add">+</span></li>
+        </ul>
+      </div>
+      
+      <div class="column" id="addedColumn">
+        <ul class="item-list text-black">
+          <li class="item"><span class="item-text">Item Name</span> <span class="remove">-</span></li>
+          <li class="item"><span class="item-text">Margin</span> <span class="remove">-</span></li>
+          <li class="item"><span class="item-text">Qty Sold</span> <span class="remove">-</span></li>
+          <li class="item"><span class="item-text">Sales Price</span> <span class="remove">-</span></li>
+          <li class="item"><span class="item-text">Sales With Tax</span> <span class="remove">-</span></li>
+          <li class="item"><span class="item-text">SKU(Item)</span> <span class="remove">-</span></li>
+        </ul>
+      </div>  
+    </div>  
+  </div>
+</div>
      
 </form>
-<div class="container" style="margin-top:70% ;padding-right:73% ;white-space: nowrap;">
+<div class="container" style="margin-top:45% ;padding-left:23% ;white-space: nowrap;">
     <div class="buttons" style="position: sticky;bottom: 1px;">
         <button class="button report-button">Run Report</button>
         <button class="button cancel-button">Cancel</button>
@@ -241,7 +204,7 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const originalAvailableItems = document.querySelectorAll("#originalColumn .items");
+      const originalAvailableItems = document.querySelectorAll("#originalColumn .item");
       const originalAddButtons = document.querySelectorAll("#originalColumn .add");
       const selectedItems = document.querySelector("#addedColumn .item-list");
       const addedRemoveButtons = document.querySelectorAll("#addedColumn .remove");
@@ -256,7 +219,7 @@
           const itemId = `selected-${itemText}`; // Unique identifier
           itemIds[itemText] = itemId;
           const listItem = document.createElement("li");
-          listItem.className = "items";
+          listItem.className = "item";
           listItem.innerHTML = `<span class="item-text">${itemText}</span> <span class="remove">-</span>`;
           listItem.setAttribute("data-item-id", itemId); // Set the unique identifier
           selectedItems.appendChild(listItem);
@@ -278,7 +241,7 @@
       
           // Create a new list item for the available column
           const listItem = document.createElement("li");
-          listItem.className = "items";
+          listItem.className = "item";
           listItem.innerHTML = `<span class="item-text">${itemText}</span> <span class="add">+</span>`;
           listItem.setAttribute("data-item-id", itemId); // Set the unique identifier
           
@@ -317,7 +280,7 @@
           }
         });
     
-        selectedItems.querySelectorAll(".items").forEach(item => {
+        selectedItems.querySelectorAll(".item").forEach(item => {
           const itemText = item.querySelector(".item-text").textContent.toLowerCase();
           if (itemText.includes(searchTerm)) {
             item.style.display = "flex";
@@ -333,6 +296,6 @@
         });
       });
     });    
-  </script>
+  </script> 
 
 {% endblock %}

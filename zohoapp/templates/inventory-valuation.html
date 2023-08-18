@@ -143,7 +143,15 @@ button {
 }
 h2,h4,h5{
   color: white;
-}      
+}   
+.cancel-button {
+      background-color: #333; /* Change the background color */
+      color: white; /* Change the text color */
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }   
 </style>
 
 
@@ -261,24 +269,27 @@ h2,h4,h5{
             
               
              
-              </div><br>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div><br>
                 <p>**Amount is displayed in your base currency <span style="background-color: green;">INR</span></p>
               <p>***Only items having stock or transactions are displayed</p>
             
                 <br><br><br>
-            </div>
+      
       
            
 
-        </div>
-      </div>    
+        
 
            
         
 
     <!-- </div> -->
 
-</div>
+
 <div id="pdfModal" class="modal">
   <div class="modal-content">
     <div class="modal-header" style="background-color: lightgray;margin-bottom:10% ;">
@@ -383,9 +394,9 @@ h2,h4,h5{
         $('#reportrange span').text(label);
         $('#selectedEndDate').text('As of'+'  '+end.format('MMMM D, YYYY'));
       }
-   
+      
   
-    $('#reportrange').daterangepicker({
+      var daterangepickerOptions ={
         startDate: start,
         endDate: end,
         ranges: {
@@ -398,30 +409,40 @@ h2,h4,h5{
            'Previous Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
            'Previous Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
            'Previous Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-           
+           //'Custom':[moment(),moment()]
         },
         opens: 'left', // Adjust the direction of the calendar popup if needed
         showCustomRangeLabel: true,
-       // singleDatePicker:true,
+        //singleDatePicker:true,
         showDropdowns:true,
-        alwaysShowCalanders:false,
         linkedCalenders:false,
-        
+        showCancel:true,
+        cancelClass: 'cancel-button',
+        maxSpan:{days:30}
+
         
 
-    },cb, function(start, end, label) {
-      
-        $('#selectedEndDate').text('As of'+'  '+ end.format('MMMM D, YYYY'));
-     
-    });
-    
+    };
+    $('#reportrange').daterangepicker(daterangepickerOptions, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    if (picker.chosenLabel === 'Custom') {
+        $('#selectedEndDate').text('As of ' + picker.endDate.format('MMMM D, YYYY'));
+    }
+});
+
     $('.custom-caret i').click(function() {
         $('#reportrange').data('daterangepicker').toggle();
     });
+    $('.cancel-button').click(function() {
+        $('#reportrange').data('daterangepicker').setStartDate(start);
+        $('#reportrange').data('daterangepicker').setEndDate(end);
+    });
+   
+    $('.drp-calendar.right').remove();
+      
 
-
-    cb(start, end,'Custom');
-  
+    cb(start, end, 'Custom');
   });
   </script>
 
