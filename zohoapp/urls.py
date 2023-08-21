@@ -318,6 +318,9 @@ urlpatterns = [
      path('custom_valuation_repot',views.custom_valuation_repot,name='custom_valuation_repot'),
     path('show_hide',views.show_hide,name='show_hide'),
     path('general',views.general,name='general'),
+##gst report####
+    path('gst_reports_gst2',views.gst_reports_gst2,name='gst_reports_gst2'),
+    path('gstr2_load',views.gstr2_load,name='gstr2_load'),
 
     
     path('add_customers',views.add_customers,name='add_customers'),

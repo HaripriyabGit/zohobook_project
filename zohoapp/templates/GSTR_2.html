@@ -1,0 +1,78 @@
+{% extends 'base3.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .daterangepicker{
+    color: black;
+}
+</style>
+
+<script>
+    $(function() {
+    
+      var start = moment().subtract(29, 'days');
+      var end = moment();
+    
+      function cb(start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY') );
+      }
+    
+      $('#reportrange').daterangepicker({
+          startDate: start,
+          endDate: end,
+          
+      }, cb);
+    
+      cb(start, end);
+    
+   });
+</script>   
+
+<br> 
+ <div class="container-fulid" style="height:2% ;">
+ <nav class="nav nav-pills navbar-expand-lg navbar-light " id="navabars">
+  <!-- Navbar brand or logo -->
+  <a class="navbar-brand" href="#"></a>
+  
+  <!-- Navbar content -->
+  
+
+         
+
+  <li class="nav-item " style="padding-left:1000px ;">
+    <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"><i class="fa fa-print"></i></a>
+
+      
+        <a class="printdrop" href="#" onclick="printPageContent()" ></a>
+ 
+  </li>
+
+
+  <li class="nav-item " style="padding-left:10px ;">
+    <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width:5%;"  onclick="exportAs('xlsx')"><i class="fas fa-file-excel" style="color:black"></i></a>
+
+    
+  </li>
+           <li class="nav-item">
+            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 20px;"> 
+       
+           </li>
+      </ul>
+  </div>
+</nav>
+<div id="contentToExport">
+ <div class="row " style="margin-top:3% ;" >
+     <div class="col-md-12 form-inline ">
+       <div class="row">
+         <div class="col-md-9"><a class="text-white" style="font-size: 1.5rem;white-space: nowrap;">GSTR2 REPORT</a>
+          </div>
+
+       </div>
+   </div>
+ </div>
+</div>
+ 
+
+</div>
+        
+{%endblock%}

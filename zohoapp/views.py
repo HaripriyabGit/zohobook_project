@@ -6908,3 +6908,12 @@ def show_hide(request):
 def general(request):
     company = company_details.objects.get(user=request.user)
     return render(request,'custom-valuation-report.html',{'company':company})
+
+
+def gst_reports_gst2(request):
+    company = company_details.objects.get(user=request.user)
+    return render(request,'gst_gstr2_reports.html',{'company':company})
+
+def gstr2_load(request):
+    company = company_details.objects.get(user=request.user)
+    return render(request,'GSTR_2.html',{'company':company})
