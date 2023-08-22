@@ -6873,6 +6873,596 @@ def payment_delete_details(request):
     payment.delete()
     return redirect('paymentmethod')
 
+
+#-----------bills-----sumayya------------------------------------------------------------------------------------------------
+
+def view_bills(request):
+    user = request.user
+    bills = PurchaseBills.objects.filter(user=user).order_by('-id')
+    company = company_details.objects.get(user=user)
+    context = {
+        'bills': bills,
+        'company': company,
+    }
+
+    return render(request, 'viewbills.html', context)
+
+
+def new_bill(request):
+    user = request.user
+    company = company_details.objects.get(user_id=user.id)
+    items = AddItem.objects.filter(user_id=user.id)
+    vendors = vendor_table.objects.filter(user_id=user.id)
+    customers = customer.objects.filter(user_id=user.id)
+    terms = payment_terms.objects.all()
+    units = Unit.objects.all()
+    account = Chart_of_Account.objects.all()
+    account_types = Chart_of_Account.objects.values_list('account_type', flat=True).distinct()
+    sales_acc = Sales.objects.all()
+    pur_acc = Purchase.objects.all()
+    last_id = PurchaseBills.objects.filter(user_id=user.id).order_by('-id').values('id').first()
+    if last_id:
+        last_id = last_id['id']
+        next_no = last_id+1
+    else:
+        next_no = 1
+    context = {'company': company,
+               'items': items,
+               'vendors': vendors,
+               'customers': customers,
+               'terms': terms,
+               'units': units,
+               'b_no': next_no,
+               'acc': account,
+               'acc_types':account_types,
+               's_acc': sales_acc,
+               'p_acc': pur_acc,
+               }
+
+    return render(request, 'newbill.html', context)
+
+def get_customer_data_bill(request):
+    user = request.user
+    name = request.GET.get('id')
+    print(name)
+    custobject = customer.objects.get(customerName=name, user=user)
+    email = custobject.customerEmail
+    pos = custobject.placeofsupply
+    print(email)
+    print(pos)
+    return JsonResponse({"status": " not", 'email': email, 'pos': pos})
+    return redirect('/')
+
+def get_vendor_data_bill(request):
+    user = request.user
+    name = request.GET.get('id')
+    first_name, last_name = name.split(' ')
+    print(name)
+    print(first_name)
+    print(last_name)
+    vendorobject = vendor_table.objects.get(first_name=first_name, last_name=last_name)
+    email = vendorobject.vendor_email
+    sos = vendorobject.source_supply
+    print(email)
+    print(sos)
+    return JsonResponse({"status": " not", 'email': email, 'sos': sos})
+    return redirect('/')
+
+@login_required(login_url='login')
+def add_vendor_bills(request):
+    company = company_details.objects.get(user = request.user)
+
+    if request.method=='POST':
+
+        title=request.POST.get('title')
+        first_name=request.POST.get('firstname')
+        last_name=request.POST.get('lastname')
+        fullname = request.POST.get('display_name')
+        comp_name = request.POST.get('company_name')
+        email=request.POST.get('email')
+        website=request.POST.get('website')
+        w_mobile=request.POST.get('work_mobile')
+        p_mobile=request.POST.get('pers_mobile')
+        skype = request.POST.get('skype')
+        desg = request.POST.get('desg')
+        dpt = request.POST.get('dpt')
+        gsttype=request.POST.get('gsttype')
+        gstin=request.POST.get('gstin')
+        panno=request.POST.get('panno')
+        s_supply=request.POST.get('sourceofsupply')
+        currency=request.POST.get('currency')
+        balance=request.POST.get('openingbalance')
+        payment=request.POST.get('paymentterms')
+        street=request.POST.get('street')
+        city=request.POST.get('city')
+        state=request.POST.get('state')
+        pincode=request.POST.get('pincode')
+        country=request.POST.get('country')
+        fax=request.POST.get('fax')
+        phone=request.POST.get('phone')
+        shipstreet=request.POST.get('shipstreet')
+        shipcity=request.POST.get('shipcity')
+        shipstate=request.POST.get('shipstate')
+        shippincode=request.POST.get('shippincode')
+        shipcountry=request.POST.get('shipcountry')
+        shipfax=request.POST.get('shipfax')
+        shipphone=request.POST.get('shipphone')
+
+        u = User.objects.get(id = request.user.id)
+
+        vend = vendor_table(user = u,salutation=title,first_name=first_name,last_name=last_name,company_name=comp_name,vendor_display_name=fullname,
+                            vendor_email=email,vendor_wphone=w_mobile,vendor_mphone=p_mobile,skype_number=skype,designation=desg,
+                            department=dpt,website=website,gst_treatment=gsttype,gst_number=gstin,pan_number=panno,source_supply=s_supply,
+                            currency=currency,opening_bal=balance,payment_terms=payment,bcountry=country,baddress=street,bcity=city,
+                            bstate=state,bphone=phone,bfax=fax,scountry=shipcountry,saddress=shipstreet,scity=shipcity,
+                            sstate=shipstate,sphone=shipphone,sfax=shipfax)
+        vend.save()
+
+        response_data = {
+            "message": "success",
+            "fullname":fullname,
+            "email": email,
+            "sos": s_supply
+        }
+
+        return JsonResponse(response_data)
+
+@login_required(login_url='login')
+def entr_custmr_for_bills(request):
+    
+    company = company_details.objects.get(user = request.user)
+
+    if request.method=='POST':
+
+        # title=request.POST.get('title')
+        # first_name=request.POST.get('firstname')
+        # last_name=request.POST.get('lastname')
+        # comp=request.POST.get('company_name')
+        cust_type = request.POST.get('customer_type')
+        name = request.POST.get('display_name')
+        comp_name = request.POST.get('company_name')
+        email=request.POST.get('email')
+        website=request.POST.get('website')
+        w_mobile=request.POST.get('work_mobile')
+        p_mobile=request.POST.get('pers_mobile')
+        fb = request.POST.get('facebook')
+        twitter = request.POST.get('twitter')
+        skype = request.POST.get('skype')
+        desg = request.POST.get('desg')
+        dpt = request.POST.get('dpt')
+        gsttype=request.POST.get('gsttype')
+        # gstin=request.POST.get('gstin')
+        # panno=request.POST.get('panno')
+        supply=request.POST.get('placeofsupply')
+        tax = request.POST.get('tax_preference')
+        currency=request.POST.get('currency')
+        balance=request.POST.get('openingbalance')
+        payment=request.POST.get('paymentterms')
+        street1=request.POST.get('street1')
+        street2=request.POST.get('street2')
+        city=request.POST.get('city')
+        state=request.POST.get('state')
+        pincode=request.POST.get('pincode')
+        country=request.POST.get('country')
+        fax=request.POST.get('fax')
+        phone=request.POST.get('phone')
+        # shipstreet1=request.POST.get('shipstreet1')
+        # shipstreet2=request.POST.get('shipstreet2')
+        # shipcity=request.POST.get('shipcity')
+        # shipstate=request.POST.get('shipstate')
+        # shippincode=request.POST.get('shippincode')
+        # shipcountry=request.POST.get('shipcountry')
+        # shipfax=request.POST.get('shipfax')
+        # shipphone=request.POST.get('shipphone')
+
+        u = User.objects.get(id = request.user.id)
+
+        cust = customer(customerName = name,customerType = cust_type, companyName= comp_name, GSTTreatment=gsttype, 
+                        customerWorkPhone = w_mobile,customerMobile = p_mobile, customerEmail=email,skype = skype,Facebook = fb, 
+                        Twitter = twitter,placeofsupply=supply,Taxpreference = tax,currency=currency, website=website, 
+                        designation = desg, department = dpt,OpeningBalance=balance,Address1=street1,Address2=street2, city=city, 
+                        state=state, PaymentTerms=payment,zipcode=pincode,country=country,  fax = fax,  phone1 = phone,user = u)
+        cust.save()
+
+        response_data = {
+            "message": "success",
+            "name":name,
+            "email": email,
+            "pos": supply
+        }
+
+        return JsonResponse(response_data)
+
+@login_required(login_url='login')
+def create_account_bills(request):
+    u = User.objects.get(id = request.user.id)
+    company = company_details.objects.get(user = request.user)
+
+    if request.method=='POST':
+
+        type=request.POST.get('type')
+        name=request.POST.get('name')
+
+        u = User.objects.get(id = request.user.id)
+
+        acc = Chart_of_Account(account_type=type,account_name=name,user = u)
+        acc.save()
+
+        response_data = {
+            "message": "success",
+            "name":name,
+        }
+
+        return JsonResponse(response_data)
+
+@login_required(login_url='login')
+def create_payment_terms_bills(request):
+    u = User.objects.get(id = request.user.id)
+    company = company_details.objects.get(user = request.user)
+
+    if request.method=='POST':
+
+        t_name=request.POST.get('name')
+        t_days=request.POST.get('days')
+
+        u = User.objects.get(id = request.user.id)
+
+        term = payment_terms(Terms=t_name,Days=t_days)
+        term.save()
+
+        response_data = {
+            "message": "success",
+            "t_name":t_name,
+        }
+
+        return JsonResponse(response_data)
+    
+def additem_bills(request):
+    
+    radio=request.GET.get('radios')
+    inter=request.GET.get('inters')
+    intra=request.GET.get('intras')
+    type=request.GET.get('types')
+    name=request.GET.get('names')
+    unit=request.GET.get('units')
+    sel_price=request.GET.get('sel_prices')
+    sel_acc=request.GET.get('sel_accs')
+    s_desc=request.GET.get('s_descs')
+    cost_price=request.GET.get('cost_prices')
+    cost_acc=request.GET.get('cost_accs')      
+    p_desc=request.GET.get('p_descs')
+    u=request.user.id
+    us=request.user
+    history="Created by" + str(us)
+    user=User.objects.get(id=u)
+    unit=Unit.objects.get(id=unit)
+    sel=Sales.objects.get(id=sel_acc)
+    cost=Purchase.objects.get(id=cost_acc)
+    ad_item=AddItem(type=type,Name=name,p_desc=p_desc,s_desc=s_desc,s_price=sel_price,p_price=cost_price,unit=unit,
+                sales=sel,purchase=cost,user=user,creat=history,interstate=inter,intrastate=intra
+                    )
+    ad_item.save()
+
+    return JsonResponse({"status": " not", 'name': name})
+
+def itemdata_bills(request):
+    cur_user = request.user
+    user = User.objects.get(id=cur_user.id)
+    company = company_details.objects.get(user=user)
+    # print(company.state)
+    id = request.GET.get('id')
+    cust = request.GET.get('cust')
+    print(id)
+    print(cust)
+
+    item = AddItem.objects.get(Name=id, user=user)
+
+    rate = item.p_price
+    return JsonResponse({"status": " not", 'rate': rate})
+    return redirect('/')
+
+def create_purchase_bill(request):
+    cur_user = request.user
+    user = User.objects.get(id=cur_user.id)
+    if request.method == 'POST':
+        vendor_name = request.POST['vendor_name']
+        vendor_email = request.POST['vendor_email']
+        sos = request.POST['sos']
+        cust_name = request.POST['customer_name']
+        cust_email = request.POST['customer_email']
+        pos = request.POST['pos']
+        bill_number = request.POST['bill_number']
+        order_number = request.POST['order_number']
+        bill_date = request.POST['bill_date']
+        due_date = request.POST['due_date']
+        terms = request.POST['p_terms']
+
+        item = request.POST.getlist('item[]')
+        account = request.POST.getlist('account[]')
+        quantity = request.POST.getlist('quantity[]')
+        rate = request.POST.getlist('rate[]')
+        tax = request.POST.getlist('tax[]')
+        amount = request.POST.getlist('amount[]')
+        # print(item)
+        # print(quantity)
+        # print(rate)
+        # print(discount)
+        # print(tax)
+        # print(amount)
+
+        # cust_note = request.POST['customer_note']
+        sub_total = request.POST['subtotal']
+        igst = request.POST['igst']
+        sgst = request.POST['sgst']
+        cgst = request.POST['cgst']
+        tax_amnt = request.POST['total_taxamount']
+        shipping = request.POST['shipping_charge']
+        discount = request.POST['discount_amnt']
+        total = request.POST['total']
+        # tearms_conditions = request.POST['tearms_conditions']
+        attachment = request.FILES.get('file')
+        status = 'Draft'
+
+        bill = PurchaseBills(user=user, customer_name=cust_name,customer_email= cust_email,place_of_supply=pos,vendor_name=vendor_name,
+                             vendor_email=vendor_email,source_of_supply=sos,bill_no=bill_number, order_number=order_number, bill_date=bill_date, 
+                             due_date=due_date,payment_terms=terms, sub_total=sub_total,igst=igst,sgst=sgst,cgst=cgst,tax_amount=tax_amnt, 
+                             shipping_charge=shipping,discount=discount, total=total, status=status,attachment=attachment)
+        bill.save()
+
+        if len(item) == len(quantity) == len(rate) == len(account) == len(tax) == len(amount):
+            mapped = zip(item, quantity, rate, account, tax, amount)
+            mapped = list(mapped)
+            for element in mapped:
+                created = PurchaseBillItems.objects.create(
+                    purchase_bill=bill, item_name=element[0], quantity=element[1], rate=element[2], account=element[3], tax_percentage=element[4], amount=element[5])
+    return redirect('view_bills')
+
+
+def create_purchase_bill1(request):
+    cur_user = request.user
+    user = User.objects.get(id=cur_user.id)
+    if request.method == 'POST':
+        vendor_name = request.POST['vendor_name']
+        vendor_email = request.POST['vendor_email']
+        sos = request.POST['sos']
+        cust_name = request.POST['customer_name']
+        cust_email = request.POST['customer_email']
+        pos = request.POST['pos']
+        bill_number = request.POST['bill_number']
+        order_number = request.POST['order_number']
+        bill_date = request.POST['bill_date']
+        due_date = request.POST['due_date']
+        terms = request.POST['p_terms']
+
+        item = request.POST.getlist('item[]')
+        account = request.POST.getlist('account[]')
+        quantity = request.POST.getlist('quantity[]')
+        rate = request.POST.getlist('rate[]')
+        tax = request.POST.getlist('tax[]')
+        amount = request.POST.getlist('amount[]')
+        # print(item)
+        # print(quantity)
+        # print(rate)
+        # print(discount)
+        # print(tax)
+        # print(amount)
+
+        # cust_note = request.POST['customer_note']
+        sub_total = request.POST['subtotal']
+        igst = request.POST['igst']
+        sgst = request.POST['sgst']
+        cgst = request.POST['cgst']
+        tax_amnt = request.POST['total_taxamount']
+        shipping = request.POST['shipping_charge']
+        discount = request.POST['discount_amnt']
+        total = request.POST['total']
+        # tearms_conditions = request.POST['tearms_conditions']
+        attachment = request.FILES.get('file')
+        status = 'Draft'
+
+        bill = PurchaseBills(user=user, customer_name=cust_name,customer_email= cust_email,place_of_supply=pos,vendor_name=vendor_name,
+                             vendor_email=vendor_email,source_of_supply=sos,bill_no=bill_number, order_number=order_number, bill_date=bill_date, 
+                             due_date=due_date,payment_terms=terms, sub_total=sub_total,igst=igst,sgst=sgst,cgst=cgst,tax_amount=tax_amnt, 
+                             shipping_charge=shipping,discount=discount, total=total, status=status,attachment=attachment)
+        bill.save()
+
+        if len(item) == len(quantity) == len(rate) == len(account) == len(tax) == len(amount):
+            mapped = zip(item, quantity, rate, account, tax, amount)
+            mapped = list(mapped)
+            for element in mapped:
+                created = PurchaseBillItems.objects.create(
+                    purchase_bill=bill, item_name=element[0], quantity=element[1], rate=element[2], account=element[3], tax_percentage=element[4], amount=element[5])
+    return redirect('view_bills')
+
+
+
+def bill_view(request, b_id):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    bills = PurchaseBills.objects.filter(user=user)
+    bill = PurchaseBills.objects.get(id=b_id)
+    items = PurchaseBillItems.objects.filter(purchase_bill=bill)
+    context = {
+        'company': company,
+        'bills': bills,
+        'bill': bill,
+        'items': items,
+    }
+    return render(request, 'bill_slip.html', context)
+
+def add_comment_bills(request,bill_id):
+    if request.method == 'POST':
+        bill = PurchaseBills.objects.get(id=bill_id) 
+        bill.comments = request.POST['comment']
+        bill.save()
+        return redirect('bill_view',b_id = bill_id)
+    
+
+
+
+def edit_bill(request,bill_id):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    customers = customer.objects.filter(user_id=user.id)
+    vendors = vendor_table.objects.filter(user_id=user.id)
+    items = AddItem.objects.filter(user_id=user.id)
+    bill = PurchaseBills.objects.get(id=bill_id)
+    bill_items = PurchaseBillItems.objects.filter(purchase_bill=bill)
+    terms = payment_terms.objects.all()
+    account = Chart_of_Account.objects.all()
+    account_types = Chart_of_Account.objects.values_list('account_type', flat=True).distinct()
+    sales_acc = Sales.objects.all()
+    pur_acc = Purchase.objects.all()
+    context = {
+        'company': company,
+        'bill': bill,
+        'customers': customers,
+        'items': items,
+        'bill_items': bill_items,
+        'vendors': vendors,
+        'terms': terms,
+        'acc': account,
+        'acc_types':account_types,
+        's_acc': sales_acc,
+        'p_acc': pur_acc,
+    }
+    return render(request, 'edit_bill.html', context)
+
+def update_bills(request,pk):
+    cur_user = request.user
+    user = User.objects.get(id=cur_user.id)
+
+    if request.method == 'POST':
+        bill = PurchaseBills.objects.get(id=pk)
+        bill.user = user
+        bill.vendor_name = request.POST['vendor_name']
+        bill.vendor_email = request.POST['vendor_email']
+        bill.source_of_supply = request.POST['sos']
+        bill.customer_name = request.POST['customer_name']
+        bill.customer_email = request.POST['customer_email']
+        bill.place_of_supply = request.POST['pos']
+        bill.bill_no = request.POST['bill_number']
+        bill.order_number = request.POST['order_number']
+        bill.bill_date = request.POST['bill_date']
+        bill.due_date = request.POST['due_date']
+        bill.payment_terms = request.POST['p_terms']
+
+        bill.sub_total = request.POST['subtotal']
+        bill.igst = request.POST['igst']
+        bill.sgst = request.POST['sgst']
+        bill.cgst = request.POST['cgst']
+        bill.tax_amount = request.POST['total_taxamount']
+        bill.shipping_charge = request.POST['shipping_charge']
+        bill.discount = request.POST['discount_amnt']
+        bill.total = request.POST['total']
+        bill.status = 'Draft'
+
+        old=bill.attachment
+        new=request.FILES.get('file')
+        if old != None and new == None:
+            bill.attachment = old
+        else:
+            bill.attachment = new
+
+        bill.save()
+
+        item = request.POST.getlist('item[]')
+        account = request.POST.getlist('account[]')
+        quantity = request.POST.getlist('quantity[]')
+        rate = request.POST.getlist('rate[]')
+        tax = request.POST.getlist('tax[]')
+        amount = request.POST.getlist('amount[]')
+
+       
+        # print(item)
+        # print(quantity)
+        # print(rate)
+        # print(discount)
+        # print(tax)
+        # print(amount)
+
+        objects_to_delete = PurchaseBillItems.objects.filter(purchase_bill_id=bill.id)
+        objects_to_delete.delete()
+
+        
+        if len(item) == len(quantity) == len(rate) == len(account) == len(tax) == len(amount):
+            mapped = zip(item, quantity, rate, account, tax, amount)
+            mapped = list(mapped)
+            for element in mapped:
+                created = PurchaseBillItems.objects.create(
+                    purchase_bill=bill, item_name=element[0], quantity=element[1], rate=element[2], account=element[3], tax_percentage=element[4], amount=element[5])
+    return redirect('bill_view',b_id = bill.id)
+
+def upload_file_bills(request,bill_id):
+    if request.method == 'POST':
+        bill = PurchaseBills.objects.get(id=bill_id) 
+        bill.attachment = request.FILES.get('file')
+        bill.save()
+        return redirect('bill_view',b_id = bill_id)
+
+def delete_bill(request,bill_id):
+    bill = PurchaseBills.objects.get(id = bill_id)
+    bill.delete()
+    return redirect('view_bills')
+
+def search_bill(request):
+    if request.method == "POST":
+        user = request.user
+        company = company_details.objects.get(user=user)
+        search = request.POST['search']
+        cloumn = request.POST['type']
+
+        if cloumn == '1' or search  == '':
+            return redirect('view_bills')    
+
+        else :
+            if cloumn == '2':
+                bills = PurchaseBills.objects.filter(user=user,customer_name=search).all()
+
+                context = {
+                    'bills': bills,
+                    'company': company,
+                }
+
+                return render(request, 'viewbills.html', context)
+
+            else:
+                if cloumn == '3':
+                    bills = PurchaseBills.objects.filter(user=user,bill_no=search).all()
+
+                    context = {
+                        'bills': bills,
+                        'company': company,
+                    }
+
+                    return render(request, 'viewbills.html', context)       
+   
+    
+    return redirect('view_bills')
+#-------------------------------------------
+
+def customerAtoZ_bills(request):
+    user = request.user
+    bills = PurchaseBills.objects.filter(user=user).order_by('customer_name')
+    company = company_details.objects.get(user=user)
+    context = {
+        'bills': bills,
+        'company': company,
+    }
+
+    return render(request, 'viewbills.html', context)
+
+def vendorAtoZ_bills(request):
+    user = request.user
+    bills = PurchaseBills.objects.filter(user=user).order_by('vendor_name')
+    company = company_details.objects.get(user=user)
+    context = {
+        'bills': bills,
+        'company': company,
+    }
+
+    return render(request, 'viewbills.html', context)
+
 ###########Report############
 
 def report_inventory_view(request):
@@ -6916,4 +7506,18 @@ def gst_reports_gst2(request):
 
 def gstr2_load(request):
     company = company_details.objects.get(user=request.user)
-    return render(request,'GSTR_2.html',{'company':company})
+    purchase= PurchaseBills.objects.all()
+    purchaseItem=PurchaseBillItems.objects.all()
+    return render(request,'GSTR_2.html',{'company':company,'purchase':purchase,'purchases':purchaseItem})
+
+
+def sales_by_hsn_load(request):
+     company = company_details.objects.get(user=request.user)
+     item = AddItem.objects.all()
+     invoices=invoice.objects.all()
+     
+     return render(request,'sales_by_hsn.html',{'company':company,'items':item,'invoice':invoices})
+
+
+    
+

@@ -675,8 +675,8 @@
                                         </div>
 
                                         <div class="dropdown-item">
-                                            <a class="d-inline-block" style="color: #ffffff" href="">Bills</a>
-                                            <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
+                                            <a class="d-inline-block" style="color: #ffffff" href="{% url 'view_bills' %}">Bills</a>
+                                            <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'new_bill' %}">
                                                 <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
                     <i class="mdi mdi-plus"></i>
                   </span>
@@ -748,7 +748,7 @@
 
 
                             <li class="nav-item menu-items">
-                                <a class="nav-link" href="{% url 'report_inventory_view' %}">
+                                <a class="nav-link" href="{% url 'gst_reports_gst2' %}">
                                     <span class="menu-icon">
               <i class="mdi mdi-calendar-week"></i>
             </span>

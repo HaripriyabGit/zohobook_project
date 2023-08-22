@@ -1,32 +1,34 @@
 {% extends 'base3.html' %}
 {% block content %}
 {% load static %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <style>
     .daterangepicker{
     color: black;
+
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color: #333;
+
+}
+
+th, td,tr {
+  padding: 10px;
+  text-align: center;
+ border: 1px solid #333;
+}
+
+thead {
+  color: #fff;
+}
+
+#over:hover {
+  background-color: rgba(110, 110, 110, 0.616);
 }
 </style>
-
-<script>
-    $(function() {
-    
-      var start = moment().subtract(29, 'days');
-      var end = moment();
-    
-      function cb(start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') );
-      }
-    
-      $('#reportrange').daterangepicker({
-          startDate: start,
-          endDate: end,
-          
-      }, cb);
-    
-      cb(start, end);
-    
-   });
-</script>   
 
 <br> 
  <div class="container-fulid" style="height:2% ;">
@@ -36,20 +38,18 @@
   
   <!-- Navbar content -->
   
-
          
 
   <li class="nav-item " style="padding-left:1000px ;">
-    <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"><i class="fa fa-print"></i></a>
+    <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
-        <a class="printdrop" href="#" onclick="printPageContent()" ></a>
- 
+
   </li>
 
 
   <li class="nav-item " style="padding-left:10px ;">
-    <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width:5%;"  onclick="exportAs('xlsx')"><i class="fas fa-file-excel" style="color:black"></i></a>
+    <a class="nav-link " id="" href="#" role="button" aria-expanded="false" style="background: white; color: black;width:5%;"  onclick="exportAsExcel()"><i class="fas fa-file-excel" style="color:black;transform: translateX(-40%);"></i></a>
 
     
   </li>
@@ -64,15 +64,194 @@
  <div class="row " style="margin-top:3% ;" >
      <div class="col-md-12 form-inline ">
        <div class="row">
-         <div class="col-md-9"><a class="text-white" style="font-size: 1.5rem;white-space: nowrap;">GSTR2 REPORT</a>
+         <div class="col-md-9"><a class=" text text-white" style="font-size: 1.5rem;white-space: nowrap;">GSTR2 REPORT</a>
           </div>
 
        </div>
    </div>
+
+   <div class="row" >
+    <div class="col">
+      <div class="table-resposive" style="overflow-x: auto ;border-radius: 10px;">
+        <table class="table  text-white" id="myTable" style="width: 100%;">
+            <thead >
+                <tr class="table" >
+                    
+                    <th class="table" colspan="5" style="text-align: center;">BILLS DETAILS</th>
+                    <th class="table" colspan="" style="text-align: center;">RATE</th>
+                    <th class="table" colspan="" style="text-align: center;">CESS RATE</th>
+                    <th class="table" colspan="" style="text-align: center;">TAXABLE VALUE</th>
+                    <th class="table" colspan="" style="text-align: center;">REVERSE CHARGE</th>
+                    <th class="table" colspan="4" style="text-align: center;">AMOUNT</th>
+                     <th class="table" colspan="" style="text-align: right;">PLACE OF SUPPLY(Name of State)</th>
+
+                     
+              
+                  
+                </tr>
+              <tr class="table" >
+                <th class="table">GSTIN/UIN</th>
+                <th class="table">Party Name</th>
+                <th class="table">No</th>
+                <th class="table">Date</th>
+                <th class="table" id>Value</th>
+                <th colspan="4"></th>
+               
+               
+                <th class="table"rowspan="">Integrated Tax</th>
+                <th class="table">Central Tax</th>
+                <th class="table">State/UT Tax</th>
+                <th class="table"style="text-align:left">Cess</th>
+              </tr>
+            </thead>
+            <tbody class="">
+              {%for i in purchase %}
+             
+              <tr id="over">
+              
+               
+                <td class="table">{{i.vendor_gst_no}}</td>
+                
+                <td class="table">{{i.vendor_name}}</td>
+                <td class="table">{{i.bill_no}}</td>
+                <td class="table">{{i.bill_date}}</td>
+
+                <td class="table" id="value">{{i.total}}</td>
+                
+                <td class="table">  {%for i in purchases %} {{i.tax_percentage}}{%endfor%}</td>
+                <td class="table">0</td>
+                <td class="table" id="taxablevalue">{{i.sub_total}}</td>
+                <td class="table">N</td>
+                <td class="table" id="integratedTax">{{i.igst}}</td>
+                <td class="table" id="centralTax">{{i.cgst}}</td>
+                <td class="table" id="stateTax">{{i.sgst}}</td>
+                <td class="table"id="cess">0</td>
+                <td class="table">{{i.source_of_supply}}</td>
+
+
+               
+              </tr>
+          
+            </tbody>
+            {%endfor%}
+            <tfoot>
+              <tr>
+                <th>Total</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th id="valueTotal"></th>
+                <th colspan="2"></th>
+                <th id="taxable"></th>
+                <th colspan="1" ></th>
+                <th id="integratedTaxTotal"></th>
+                <th id="centralTaxTotal"></th>
+                <th id="stateTaxTotal"></th>
+                <th id="cessTotal"></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          
+
+        </table>
+      </div>
+        <br><br><br><br><br>
+    </div>
+
+   
+
+</div>
+
+
+
+
+
+
+
  </div>
 </div>
  
 
 </div>
-        
+<script>
+  function printPageContent() {
+    const contentToPrint = document.getElementById('contentToExport');
+    const clonedContent = contentToPrint.cloneNode(true);
+
+    // Find all the elements with the class "text" within the cloned content
+    const textElements = clonedContent.querySelectorAll('.text');
+    const tableElements = clonedContent.querySelectorAll('.table');
+
+    // Set the text color to black for each element with the class "text"
+    textElements.forEach(element => {
+      element.style.color = '#000000';  // Text color (black)
+    });
+    tableElements.forEach(element => {
+      element.style.color = '#000000';
+      element.style.border ='1px solid';
+      
+    });
+
+    // Print the cloned content
+    const printWindow = window.open('', '_blank');
+    printWindow.document.body.appendChild(clonedContent);
+    printWindow.print();
+    printWindow.close();
+  }
+</script>
+<script>
+  function exportAsExcel() {
+    const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+    const wb = XLSX.utils.table_to_book(table);
+  
+    // Loop through each sheet in the workbook
+    wb.SheetNames.forEach(sheetName => {
+      const sheet = wb.Sheets[sheetName];
+  
+      // Loop through all cells to format date values
+      for (const cellAddress in sheet) {
+        if (sheet.hasOwnProperty(cellAddress)) {
+          const cell = sheet[cellAddress];
+          if (cell.t === 'd') { // Check if cell contains a date
+            cell.z = 'yyyy-mm-dd'; // Set the desired date format
+          }
+        }
+      }
+    });
+  
+    XLSX.writeFile(wb, '{{company.company_name}}.xlsx');
+  }
+  </script>
+  <script>
+// Calculate and update the totals
+function updateTotals() {
+  let valueTotal = 0;
+  let integratedTaxTotal = 0;
+  let centralTaxTotal = 0;
+  let stateTaxTotal = 0;
+  let cessTotal = 0;
+  let taxable = 0;
+
+  const rows = document.querySelectorAll('#myTable tbody tr');
+  rows.forEach(row => {
+    valueTotal += parseFloat(row.querySelector('#value').textContent);
+    taxable += parseFloat(row.querySelector('#taxablevalue').textContent);
+    integratedTaxTotal += parseFloat(row.querySelector('#integratedTax').textContent);
+    centralTaxTotal += parseFloat(row.querySelector('#centralTax').textContent);
+    stateTaxTotal += parseFloat(row.querySelector('#stateTax').textContent);
+    cessTotal += parseFloat(row.querySelector('#cess').textContent);
+  });
+
+  // Update the total cells in the footer
+  document.querySelector('#valueTotal').textContent = valueTotal.toFixed(2);
+  document.querySelector('#taxable').textContent = taxable.toFixed(2);
+  document.querySelector('#integratedTaxTotal').textContent = integratedTaxTotal.toFixed(2);
+  document.querySelector('#centralTaxTotal').textContent = centralTaxTotal.toFixed(2);
+  document.querySelector('#stateTaxTotal').textContent = stateTaxTotal.toFixed(2);
+  document.querySelector('#cessTotal').textContent = cessTotal.toFixed(2);
+}
+
+// Call the function to calculate and update totals when the page loads
+window.onload = updateTotals;
+</script>       
 {%endblock%}

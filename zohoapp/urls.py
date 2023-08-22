@@ -318,9 +318,36 @@ urlpatterns = [
      path('custom_valuation_repot',views.custom_valuation_repot,name='custom_valuation_repot'),
     path('show_hide',views.show_hide,name='show_hide'),
     path('general',views.general,name='general'),
+    #------------------------------------------------------------------------------------------------sumayya---purchase bills
+    path('view_bills',views.view_bills,name='view_bills'),
+    path('new_bill/',views.new_bill,name='new_bill'),
+    path('get_customer_data_bill/',views.get_customer_data_bill,name='get_customer_data_bill'),
+    path('get_vendor_data_bill/',views.get_vendor_data_bill,name='get_vendor_data_bill'),
+    path('create_purchase_bill/',views.create_purchase_bill,name='create_purchase_bill'),
+    path('create_purchase_bill1/',views.create_purchase_bill1,name='create_purchase_bill1'),
+    path('itemdata_bills/',views.itemdata_bills,name='itemdata_bills'),
+    path('bill_view/<int:b_id>',views.bill_view,name='bill_view'),
+    path('edit_bill/<int:bill_id>',views.edit_bill,name='edit_bill'),
+    path('update_bills/<int:pk>',views.update_bills,name='update_bills'),
+    path('add_comment_bills/<int:bill_id>',views.add_comment_bills,name='add_comment_bills'),
+    path('upload_file_bills/<int:bill_id>',views.upload_file_bills,name='upload_file_bills'),
+    path('delete_bill/<int:bill_id>',views.delete_bill,name='delete_bill'),
+    path('search_bill/',views.search_bill,name='search_bill'),
+    
+    path('entr_custmr_for_bills/',views.entr_custmr_for_bills,name='entr_custmr_for_bills'),
+    path('add_vendor_bills/',views.add_vendor_bills,name='add_vendor_bills'),
+    path('additem_bills/',views.additem_bills,name='additem_bills'),
+    path('create_account_bills/',views.create_account_bills,name='create_account_bills'),
+    path('create_payment_terms_bills/',views.create_payment_terms_bills,name='create_payment_terms_bills'),
+    #-------------------
+
+    path('customerAtoZ_bills',views.customerAtoZ_bills,name='customerAtoZ_bills'),
+    path('vendorAtoZ_bills',views.vendorAtoZ_bills,name='vendorAtoZ_bills'),
 ##gst report####
     path('gst_reports_gst2',views.gst_reports_gst2,name='gst_reports_gst2'),
     path('gstr2_load',views.gstr2_load,name='gstr2_load'),
+    path('sales_by_hsn_load',views.sales_by_hsn_load,name="sales_by_hsn_load"),
+  
 
     
     path('add_customers',views.add_customers,name='add_customers'),

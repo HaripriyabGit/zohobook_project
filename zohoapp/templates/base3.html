@@ -680,13 +680,13 @@ nav.navbar {
               </div> 
                 
               <div class="dropdown-item">
-                <a class="d-inline-block" style="color: #ffffff" href="">Bills</a>
-                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="">
-                  <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
-                    <i class="mdi mdi-plus"></i>
-                  </span>
+                <a class="d-inline-block" style="color: #ffffff" href="{% url 'view_bills' %}">Bills</a>
+                <a class="d-inline-block" style="color: #000000;margin-left: 2px;" href="{% url 'new_bill' %}">
+                    <span class="icon bg-light rounded-circle" style="text-align: right; width: 25px;">
+<i class="mdi mdi-plus"></i>
+</span>
                 </a>
-              </div>   
+            </div> 
               
               <div class="dropdown-item">
                 <a class="d-inline-block" style="color: #ffffff" href="{% url 'recurring_bill' %}">Recurring Bills</a>

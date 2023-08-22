@@ -538,6 +538,7 @@ class payment_item(models.Model):
     balance = models.IntegerField(null=True,blank=True)
     current_balance = models.IntegerField(null=True,blank=True)
     
+
     
 class Purchase_Order(models.Model):
 
@@ -691,3 +692,40 @@ class Comments_item(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
     item=models.ForeignKey(AddItem,on_delete=models.CASCADE,null=True,blank=True)
     content = models.TextField(max_length=255,null=True,blank=True)
+
+class PurchaseBills(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    customer_name = models.CharField(max_length=100,null=True,blank=True)
+    customer_email = models.CharField(max_length=100,null=True,blank=True)
+    place_of_supply = models.CharField(max_length=100,null=True,blank=True)
+    vendor_gst_no = models.CharField(max_length=100,null=True,blank=True)
+    vendor_name = models.CharField(max_length=100,null=True,blank=True)
+    vendor_email = models.CharField(max_length=100,null=True,blank=True)
+    source_of_supply = models.CharField(max_length=100,null=True,blank=True)
+    bill_no = models.CharField(max_length=100,null=True,blank=True)
+    order_number = models.CharField(max_length=100,null=True,blank=True)
+    bill_date = models.DateField(null=True)
+    due_date = models.DateField(null=True)
+    payment_terms = models.CharField(max_length=100,null=True,blank=True)
+    sub_total = models.FloatField(null=True,blank=True)
+    igst = models.FloatField(null=True,blank=True)
+    sgst = models.FloatField(null=True,blank=True)
+    cgst = models.FloatField(null=True,blank=True)
+    tax_amount = models.FloatField(null=True,blank=True)
+    shipping_charge = models.FloatField(null=True,blank=True)
+    discount = models.FloatField(null=True,blank=True)
+    total = models.FloatField(null=True,blank=True)
+    status = models.CharField(max_length=100,null=True,blank=True)
+    attachment = models.ImageField(upload_to="image/", null=True)  
+    comments = models.CharField(max_length=100,null=True,blank=True)
+
+class PurchaseBillItems(models.Model):
+    purchase_bill = models.ForeignKey(PurchaseBills,on_delete=models.CASCADE,null=True,blank=True)
+    item_name = models.CharField(max_length=100,null=True,blank=True)
+    account = models.CharField(max_length=100,null=True,blank=True)
+    quantity = models.IntegerField(null=True,blank=True)
+    rate = models.FloatField(null=True,blank=True)
+    tax_percentage = models.IntegerField(null=True,blank=True)
+    amount = models.FloatField(null=True,blank=True)
+
+
