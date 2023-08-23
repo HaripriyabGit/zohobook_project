@@ -7508,7 +7508,8 @@ def gstr2_load(request):
     company = company_details.objects.get(user=request.user)
     purchase= PurchaseBills.objects.all()
     purchaseItem=PurchaseBillItems.objects.all()
-    return render(request,'GSTR_2.html',{'company':company,'purchase':purchase,'purchases':purchaseItem})
+    context={'company':company,'purchase':purchase,'purchases':purchaseItem}
+    return render(request,'GSTR_2.html',context)
 
 
 def sales_by_hsn_load(request):

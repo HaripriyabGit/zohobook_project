@@ -1,12 +1,11 @@
 {% extends 'base3.html' %}
 {% block content %}
 {% load static %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<style>
-    .daterangepicker{
-    color: black;
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
-}
+  
+<style>
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -28,6 +27,45 @@ thead {
 #over:hover {
   background-color: rgba(110, 110, 110, 0.616);
 }
+#ui-datepicker-div{
+            width: 20rem;
+            left: 632px;
+        }
+        .ui-datepicker-calendar {
+            display: none;
+        }
+        .datepicker{
+            margin-top: 1rem;
+            display: grid;
+            justify-items: center;
+        }
+        select > option{
+            background-color: rgb(202, 49, 49);
+        }
+        .ui-datepicker-prev{
+            background: rgb(80, 53, 53);
+            cursor: pointer;
+        }
+        .ui-datepicker-next{
+            background: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+        .ui-datepicker .ui-datepicker-buttonpane button{
+            color: white;
+            background: black;
+        }
+        .ui-datepicker .ui-datepicker-buttonpane button:hover{
+            color: white;
+            background: rgb(234, 176, 0);
+        }
+        .monthYearPicker{
+            font-size: 1.5rem;
+            height: 2rem;
+            width: 20rem;
+        }
+        .monthYearPara{
+            color: rgb(15, 8, 8);
+        }
 </style>
 
 <br> 
@@ -35,12 +73,15 @@ thead {
  <nav class="nav nav-pills navbar-expand-lg navbar-light " id="navabars">
   <!-- Navbar brand or logo -->
   <a class="navbar-brand" href="#"></a>
-  
+  <!-- <div class="datepicker">
+    <p class="monthYearPara"></p>
+    <input readonly name="myDate" class="monthYearPicker" placeholder=" Date Picker " />
+</div> -->
   <!-- Navbar content -->
-  
+ 
          
 
-  <li class="nav-item " style="padding-left:1000px ;">
+  <li class="nav-item " style="padding-left:1050px ;">
     <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
@@ -48,15 +89,11 @@ thead {
   </li>
 
 
-  <li class="nav-item " style="padding-left:10px ;">
+  <li class="nav-item " style="padding-left:5px ;">
     <a class="nav-link " id="" href="#" role="button" aria-expanded="false" style="background: white; color: black;width:5%;"  onclick="exportAsExcel()"><i class="fas fa-file-excel" style="color:black;transform: translateX(-40%);"></i></a>
 
     
   </li>
-           <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 20px;"> 
-       
-           </li>
       </ul>
   </div>
 </nav>
@@ -106,6 +143,7 @@ thead {
             </thead>
             <tbody class="">
               {%for i in purchase %}
+              
              
               <tr id="over">
               
@@ -118,7 +156,7 @@ thead {
 
                 <td class="table" id="value">{{i.total}}</td>
                 
-                <td class="table">  {%for i in purchases %} {{i.tax_percentage}}{%endfor%}</td>
+                <td class="table">  {%for p in purchases %} {{p.tax_percentage}}{%endfor%}</td>
                 <td class="table">0</td>
                 <td class="table" id="taxablevalue">{{i.sub_total}}</td>
                 <td class="table">N</td>
@@ -253,5 +291,26 @@ function updateTotals() {
 
 // Call the function to calculate and update totals when the page loads
 window.onload = updateTotals;
-</script>       
+</script>      
+<script>
+  $(function() {
+      $('.monthYearPicker').datepicker({
+          changeMonth: true,
+          changeYear: true,
+          showButtonPanel: true,
+          minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+          maxDate: new Date(2023, 3),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+          dateFormat: 'MM yy'
+      }).focus(function() {
+          var thisCalendar = $(this);
+          $('.ui-datepicker-calendar').detach();
+          $('.ui-datepicker-close').click(function() {
+              var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+              var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+              thisCalendar.datepicker('setDate', new Date(year, month, 1));
+          });
+      });
+  });
+</script>
+
 {%endblock%}

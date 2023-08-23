@@ -1,8 +1,12 @@
 {% extends 'base3.html' %}
 {% block content %}
 {% load static %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<!-- Include jQuery and jQuery UI -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style>
     .filter-dropdown {
         display: none;
@@ -60,6 +64,47 @@ th, td,tr {
 thead {
   color: #fff;
 }
+#ui-datepicker-div{
+            width: 20rem;
+            left: 632px;
+        }
+        .ui-datepicker-calendar {
+            display: none;
+        }
+        .datepicker{
+          
+            display: grid;
+            justify-items: center;
+        }
+        select > option{
+            background-color: rgb(212, 212, 212);
+        }
+        .ui-datepicker-prev{
+            background: white;
+            cursor: pointer;
+        }
+        .ui-datepicker-next{
+            background: white;
+            cursor: pointer;
+        }
+        .ui-datepicker .ui-datepicker-buttonpane button{
+            color: white;
+            background: black;
+        }
+        .ui-datepicker .ui-datepicker-buttonpane button:hover{
+            color: white;
+            background: rgb(234, 176, 0);
+        }
+        .monthYearPicker{
+            font-size: 1rem;
+            height: 2rem;
+            width: 10rem;
+        }
+        .monthYearPara{
+            color: rgb(255, 255, 255);
+        }
+    </style>
+
 </style>
 <br> 
  <div class="container-fulid" style="height:2% ;">
@@ -68,10 +113,17 @@ thead {
   <a class="navbar-brand" href="#"></a>
   
   <!-- Navbar content -->
-  
+  <div class="datepicker">
+    <p class="monthYearPara"></p>
+    <input readonly name="myDate" class="monthYearPicker" placeholder="From MM/YYYY " />
+</div>&nbsp;
+<div class="datepicker">
+    <p class="monthYearPara"></p>
+    <input readonly name="myDate" class="monthYearPicker" placeholder="TO MM/YYYY " />
+</div>
          
 
-  <li class="nav-item " style="padding-left:1000px ;">
+  <li class="nav-item " style="padding-left:750px ;">
     <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
@@ -84,15 +136,20 @@ thead {
 
     
   </li>
-           <li class="nav-item">
-            <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 20px;"> 
-       
-           </li>
+          
       </ul>
   </div>
 </nav>
 <br><br><br>
 <div id="contentToExport">
+    <div class="row " style="margin-bottom:5% ;" >
+        <div class="col-md-12 form-inline ">
+          <div class="row">
+            <div class="col-md-9"><a class=" text text-white" style="font-size: 1.5rem;white-space: nowrap;">SALES SUMMARY BY HSN</a>
+             </div>
+   
+          </div>
+      </div>
     <div  style="top: 7rem; " >
   
 
@@ -103,7 +160,7 @@ thead {
                       <thead class="">
                         
                         <tr class="">
-                            <th class="table">#</th>
+                            <th class="">#</th>
                           <th class="table" >HSN<i class="fas fa-filter filter-button" style="color: red;"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
@@ -116,26 +173,98 @@ thead {
                             </div>
                             
                         </th>
-                          <th class="table">TOTAL VALUE <i class="fas fa-filter"style="color:red"></i>
+                          <th class="table">TOTAL VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
                                     <option value="less-than">Less than</option>
                                     <option value="greater-than">Greater than</option>
-                                </select>
-                                <input type="number" class="filter-value" placeholder="Enter value">
-                                <div class="filter-buttons">
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
                                     <button class="apply-filter">Apply</button>
                                     <button class="clear-filter">Clear</button>
-                                </div>
+                                
                             </div>
                         
                         </th>
-                          <th class="table">TAXABLE VALUE <i class="fas fa-filter"style="color:red"></i></th>
-                          <th class="table">IGST AMOUNT <i class="fas fa-filter"style="color:red"></i></th>
-                          <th class="table">CGST AMOUNT <i class="fas fa-filter"style="color:red"></i></th>
-                          <th class="table">SGST AMOUNT <i class="fas fa-filter"style="color:red"></i></th>
-                          <th class="table">ADD.CESS <i class="fas fa-filter"style="color:red"></i></th>
+                          <th class="table">TAXABLE VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
+                            <div class="filter-dropdown">
+                                <select class="filter-option">
+                                    <option value="equal-to">Equal to</option>
+                                    <option value="less-than">Less than</option>
+                                    <option value="greater-than">Greater than</option>
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
+                                    <button class="apply-filter">Apply</button>
+                                    <button class="clear-filter">Clear</button>
+                                
+                            </div>
+                        </th>
+                          
+                          <th class="table">IGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                            <div class="filter-dropdown">
+                                <select class="filter-option">
+                                    <option value="equal-to">Equal to</option>
+                                    <option value="less-than">Less than</option>
+                                    <option value="greater-than">Greater than</option>
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
+                                    <button class="apply-filter">Apply</button>
+                                    <button class="clear-filter">Clear</button>
+                                
+                            </div>
+                        </th>
+                          <th class="table">CGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                            <div class="filter-dropdown">
+                                <select class="filter-option">
+                                    <option value="equal-to">Equal to</option>
+                                    <option value="less-than">Less than</option>
+                                    <option value="greater-than">Greater than</option>
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
+                                    <button class="apply-filter">Apply</button>
+                                    <button class="clear-filter">Clear</button>
+                                
+                            </div>
+                        </th>
+                          <th class="table">SGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                            <div class="filter-dropdown">
+                                <select class="filter-option">
+                                    <option value="equal-to">Equal to</option>
+                                    <option value="less-than">Less than</option>
+                                    <option value="greater-than">Greater than</option>
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
+                                    <button class="apply-filter">Apply</button>
+                                    <button class="clear-filter">Clear</button>
+                                
+                            </div>
+                        </th>
+                          <th class="table">ADD.CESS <i class="fas fa-filter filter-button"style="color:red"></i>
+                            <div class="filter-dropdown">
+                                <select class="filter-option">
+                                    <option value="equal-to">Equal to</option>
+                                    <option value="less-than">Less than</option>
+                                    <option value="greater-than">Greater than</option>
+                                </select><br><br>
+                                <input type="number" class="filter-value" ><br><br>
+                                
+                               
+                                    <button class="apply-filter">Apply</button>
+                                    <button class="clear-filter">Clear</button>
+                                
+                            </div>
+                        </th>
 
                       
                         </tr>
@@ -144,17 +273,17 @@ thead {
                       <tbody>
                        
                         {%for i in items %}
-                        <tr id="over" class="table">
+                        <tr id="over" class="">
                
                        
-                          <td class="">{{i.id}}</td>
-                          <td class="">{{i.hsn}}</td>
-                          <td class="">{% for p in invoice %}{{p.subtotal}}{%endfor%}</td>
-                          <td class="">{% for p in invoice %}{{p.grandtotal}}{%endfor%}</td>
-                          <td class="">{% for p in invoice %}{{p.igst}}{%endfor%}</td>
-                          <td class="">{% for p in invoice %}{{p.cgst}}{%endfor%}</td>
-                          <td class="">{% for p in invoice %}{{p.sgst}}{%endfor%}</td>
-                          <td class="">0</td>
+                          <td class="table" style="width:auto ;">{{i.id}}</td>
+                          <td class="table" style="width: auto;">{{i.hsn}}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %} {{p.subtotal}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.grandtotal}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.igst}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.cgst}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.sgst}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">0</td>
                           
   
                         </tr>
@@ -165,37 +294,30 @@ thead {
                       </tbody>
                       
                   </table>
-        
+                  <footer>
+                    <label style="text-align: left;margin-top: 60px;"> Total Value: <span id="footer-total-sum" class="text text-success">0.00</span></label>&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="text-align: right;margin-top: 60px; padding-left:75% ;"  >Total Item: <span id="total-item-count">0</span></label>
+                </footer>
+                
 
-
-                  <script>
+                  
+               
+                <!-- <script>
                     $(document).ready(function() {
                         $('.filter-button').on('click', function() {
                             // Toggle filter dropdown visibility
                             $(this).closest('th').find('.filter-dropdown').toggle();
                         });
-                
                         $('.apply-filter').on('click', function() {
-                            const filterOption = $(this).siblings('.filter-option').val();
+                            const $table = $('#myTable');
+                            const columnIndex = $(this).closest('th').index();
                             const filterValue = $(this).siblings('.filter-value').val().trim();
                 
-                            $('#myTable tbody tr').each(function() {
-                                const cellText = $(this).find('.td').text();
+                            $table.find('tbody tr').hide();  // Hide all rows
                 
-                                if (filterOption === 'contains') {
-                                    if (cellText.includes(filterValue)) {
-                                        $(this).show();
-                                    } else {
-                                        $(this).hide();
-                                    }
-                                } else if (filterOption === 'exact-match') {
-                                    if (cellText === filterValue) {
-                                        $(this).show();
-                                    } else {
-                                        $(this).hide();
-                                    }
-                                }
-                            });
+                            $table.find(`tbody tr td:nth-child(${columnIndex + 1}):contains('${filterValue}')`).parent().show();
+                            $table.find(`tbody tr td:nth-child(${columnIndex + 1}):not(:contains('${filterValue}'))`).parent().hide();
                         });
                 
                         $('.clear-filter').on('click', function() {
@@ -204,64 +326,83 @@ thead {
                             $(this).siblings('.filter-value').val('');
                         });
                     });
-                </script>
-               
-               <!-- <script>
-                    $(document).ready(function() {
-                        $('.filter-button').on('click', function() {
-                            // Toggle filter dropdown visibility
-                            $(this).closest('th').find('.filter-dropdown').toggle();
-                        });
-                
-                        $('.apply-filter').on('click', function() {
-                            const filterOption = $(this).siblings('.filter-option').val();
-                            const filterValue = parseFloat($(this).siblings('.filter-value').val());
-                
-                            $('#myTable tbody tr').each(function() {
-                                const cellText = $(this).find('.td').text();
-                                const cellValue = parseFloat(cellText);
-                
-                                if (filterOption === 'equal-to') {
-                                    if (cellValue === filterValue) {
-                                        $(this).show();
-                                    } else {
-                                        $(this).hide();
-                                    }
-                                } else if (filterOption === 'less-than') {
-                                    if (cellValue < filterValue) {
-                                        $(this).show();
-                                    } else {
-                                        $(this).hide();
-                                    }
-                                } else if (filterOption === 'greater-than') {
-                                    if (cellValue > filterValue) {
-                                        $(this).show();
-                                    } else {
-                                        $(this).hide();
-                                    }
-                                }
-                            });
-                        });
-                
-                        $('.clear-filter').on('click', function() {
-                            $('#myTable tbody tr').show();
-                            $(this).siblings('.filter-option').val('equal-to');
-                            $(this).siblings('.filter-value').val('');
-                        });
-                    });
-                </script>
+                </script> -->
+              <script>
+              $(document).ready(function() {
+    $('.filter-button').on('click', function() {
+        $(this).closest('th').find('.filter-dropdown').toggle();
+    });
 
+    $('.apply-filter').on('click', function() {
+        const $table = $('#myTable');
+        const columnIndex = $(this).closest('th').index();
+        const filterOption = $(this).siblings('.filter-option').val();
+        const filterValue = $(this).siblings('.filter-value').val().trim();
 
+        $table.find('tbody tr').hide();  // Hide all rows
 
+        if (filterOption === 'exact-match') {
+            applyExactMatchFilter($table, columnIndex, filterValue);
+        } else if (filterOption === 'contains') {
+            applyContainsFilter($table, columnIndex, filterValue);
+        } else if (filterOption === 'equal-to') {
+            applyEqualToFilter($table, columnIndex, filterValue);
+        } else if (filterOption === 'greater-than') {
+            applyGreaterThanFilter($table, columnIndex, filterValue);
+        } else if (filterOption === 'less-than') {
+            applyLessThanFilter($table, columnIndex, filterValue);
+        }
+    });
 
+    $('.clear-filter').on('click', function() {
+        $('#myTable tbody tr').show();
+        $(this).siblings('.filter-option').val('contains');
+        $(this).siblings('.filter-value').val('');
+    });
+});
 
+function applyExactMatchFilter($table, columnIndex, filterValue) {
+    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+        if ($(this).text().trim() === filterValue) {
+            $(this).parent().show();
+        }
+    });
+}
 
+function applyContainsFilter($table, columnIndex, filterValue) {
+    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+        if ($(this).text().toLowerCase().includes(filterValue.toLowerCase())) {
+            $(this).parent().show();
+        }
+    });
+}
 
+function applyEqualToFilter($table, columnIndex, filterValue) {
+    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+        if (parseFloat($(this).text().trim()) === parseFloat(filterValue)) {
+            $(this).parent().show();
+        }
+    });
+}
 
+function applyGreaterThanFilter($table, columnIndex, filterValue) {
+    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+        if (parseFloat($(this).text().trim()) > parseFloat(filterValue)) {
+            $(this).parent().show();
+        }
+    });
+}
 
+function applyLessThanFilter($table, columnIndex, filterValue) {
+    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+        if (parseFloat($(this).text().trim()) < parseFloat(filterValue)) {
+            $(this).parent().show();
+        }
+    });
+}
+</script>
 
-
- -->
+ 
  <script>
     function printPageContent() {
       const contentToPrint = document.getElementById('contentToExport');
@@ -270,6 +411,7 @@ thead {
       // Find all the elements with the class "text" within the cloned content
       const textElements = clonedContent.querySelectorAll('.text');
       const tableElements = clonedContent.querySelectorAll('.table');
+      const filterDropdowns = clonedContent.querySelectorAll('.filter-dropdown');
   
       // Set the text color to black for each element with the class "text"
       textElements.forEach(element => {
@@ -280,6 +422,10 @@ thead {
         element.style.border ='1px solid';
         
       });
+     
+    filterDropdowns.forEach(dropdown => {
+      dropdown.style.display = 'none';
+    });
   
       // Print the cloned content
       const printWindow = window.open('', '_blank');
@@ -288,5 +434,86 @@ thead {
       printWindow.close();
     }
   </script>
+<script>
+    // ... your existing JavaScript code ...
 
+    // Update the total item count in the page footer
+    function updateTotalItemCount() {
+        const itemCount = $('#myTable tbody tr').length;
+        $('#total-item-count').text(itemCount);
+    }
+
+    // Call the function initially
+    updateTotalItemCount();
+</script>
+<!-- ... your existing HTML code ... -->
+
+<script>
+    $(document).ready(function() {
+        // ... your existing JavaScript code ...
+
+        // Calculate and display the sum of total value
+        function calculateTotalValue() {
+            let totalValue = 0;
+            $('#myTable tbody tr').each(function() {
+                const cellValue = parseFloat($(this).find('.td-total-value').text());
+                if (!isNaN(cellValue)) {
+                    totalValue += cellValue;
+                }
+            });
+            
+            // Update the footer total sum placeholder
+            $('#footer-total-sum').text(totalValue.toFixed(2));
+        }
+
+        // Call the function initially and whenever filters are applied
+        calculateTotalValue();
+        
+        // ... your existing JavaScript code ...
+    });
+</script>
+<script>
+    function exportAsExcel() {
+      const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+      const wb = XLSX.utils.table_to_book(table);
+    
+      // Loop through each sheet in the workbook
+      wb.SheetNames.forEach(sheetName => {
+        const sheet = wb.Sheets[sheetName];
+    
+        // Loop through all cells to format date values
+        for (const cellAddress in sheet) {
+          if (sheet.hasOwnProperty(cellAddress)) {
+            const cell = sheet[cellAddress];
+            if (cell.t === 'd') { // Check if cell contains a date
+              cell.z = 'yyyy-mm-dd'; // Set the desired date format
+            }
+          }
+        }
+      });
+    
+      XLSX.writeFile(wb, '{{company.company_name}}.xlsx');
+    }
+    </script>
+
+<script>
+    $(function() {
+        $('.monthYearPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+            maxDate: new Date(2023, 3),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+            dateFormat: 'MM yy'
+        }).focus(function() {
+            var thisCalendar = $(this);
+            $('.ui-datepicker-calendar').detach();
+            $('.ui-datepicker-close').click(function() {
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                thisCalendar.datepicker('setDate', new Date(year, month, 1));
+            });
+        });
+    });
+</script>
 {%endblock%}
