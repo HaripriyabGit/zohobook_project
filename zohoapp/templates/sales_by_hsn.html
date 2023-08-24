@@ -3,10 +3,8 @@
 {% load static %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <!-- Include jQuery and jQuery UI -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 <style>
     .filter-dropdown {
         display: none;
@@ -64,45 +62,36 @@ th, td,tr {
 thead {
   color: #fff;
 }
-#ui-datepicker-div{
-            width: 20rem;
-            left: 632px;
-        }
-        .ui-datepicker-calendar {
-            display: none;
-        }
-        .datepicker{
-          
-            display: grid;
-            justify-items: center;
-        }
-        select > option{
-            background-color: rgb(212, 212, 212);
-        }
-        .ui-datepicker-prev{
-            background: white;
-            cursor: pointer;
-        }
-        .ui-datepicker-next{
-            background: white;
-            cursor: pointer;
-        }
-        .ui-datepicker .ui-datepicker-buttonpane button{
-            color: white;
-            background: black;
-        }
-        .ui-datepicker .ui-datepicker-buttonpane button:hover{
-            color: white;
-            background: rgb(234, 176, 0);
-        }
-        .monthYearPicker{
-            font-size: 1rem;
-            height: 2rem;
-            width: 10rem;
-        }
-        .monthYearPara{
-            color: rgb(255, 255, 255);
-        }
+
+        .daterangepicker{
+    color: black;
+  }
+
+  .custom-caret {
+    position: absolute;
+    left: 5px; /* Adjust the value as needed */
+    top: 20%; /* Adjust the value as needed */
+    text-align: center;
+    font-size: 15px; /* Adjust the font size as needed */
+}
+
+
+.custom-caret i {
+    color: white; /* Adjust the color as needed */
+    cursor: pointer; /* Add cursor pointer */
+}  
+td{
+  text-align: center;
+  
+}
+.cancel-button {
+      background-color: #333; /* Change the background color */
+      color: white; /* Change the text color */
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }   
     </style>
 
 </style>
@@ -111,19 +100,15 @@ thead {
  <nav class="nav nav-pills navbar-expand-lg navbar-light " id="navabars">
   <!-- Navbar brand or logo -->
   <a class="navbar-brand" href="#"></a>
-  
-  <!-- Navbar content -->
-  <div class="datepicker">
-    <p class="monthYearPara"></p>
-    <input readonly name="myDate" class="monthYearPicker" placeholder="From MM/YYYY " />
-</div>&nbsp;
-<div class="datepicker">
-    <p class="monthYearPara"></p>
-    <input readonly name="myDate" class="monthYearPicker" placeholder="TO MM/YYYY " />
-</div>
-         
+  <div class="nav-item dropdown btn btn-primary" id="reportrange"  style="padding-right: 10%; color: black;  width: 10vw;white-space: nowrap;font-weight: bolder;height:5vh;">
+    <!-- <i class="fa fa-calendar"style=" transform: translateXY(70%);"></i>&nbsp; -->
+    
+    <span class="custom-caret"> <i class="fa fa-caret-down"></i></span>
+  </div>
+ 
+<h5 id="selectedEndDate"  class="btn btn-secondary" style=" color: black;  width: 24vw;white-space: nowrap;font-weight: bolder;height:5vh;"></h5>
 
-  <li class="nav-item " style="padding-left:750px ;">
+  <li class="nav-item " style="padding-left:580px ;">
     <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
@@ -173,7 +158,7 @@ thead {
                             </div>
                             
                         </th>
-                          <th class="table">TOTAL VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table ">TOTAL VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -278,8 +263,9 @@ thead {
                        
                           <td class="table" style="width:auto ;">{{i.id}}</td>
                           <td class="table" style="width: auto;">{{i.hsn}}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %} {{p.subtotal}}{%endfor%}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.grandtotal}}{%endfor%}</td>
+                         
+                          <td class="table td-total-value" style="width:auto ;">{% for p in invoice %} {{p.grandtotal}}{%endfor%}</td>
+                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.subtotal}}{%endfor%}</td>
                           <td class="table" style="width:auto ;">{% for p in invoice %}{{p.igst}}{%endfor%}</td>
                           <td class="table" style="width:auto ;">{% for p in invoice %}{{p.cgst}}{%endfor%}</td>
                           <td class="table" style="width:auto ;">{% for p in invoice %}{{p.sgst}}{%endfor%}</td>
@@ -495,25 +481,64 @@ function applyLessThanFilter($table, columnIndex, filterValue) {
       XLSX.writeFile(wb, '{{company.company_name}}.xlsx');
     }
     </script>
-
 <script>
     $(function() {
-        $('.monthYearPicker').datepicker({
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            maxDate: new Date(2023, 3),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            dateFormat: 'MM yy'
-        }).focus(function() {
-            var thisCalendar = $(this);
-            $('.ui-datepicker-calendar').detach();
-            $('.ui-datepicker-close').click(function() {
-                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                thisCalendar.datepicker('setDate', new Date(year, month, 1));
-            });
-        });
+    
+      var start = moment().subtract(29, 'days');
+      var end = moment();
+    
+      function cb(start, end,label) {
+          $('#reportrange span').text(label);
+          $('#selectedEndDate').text('BETWEEN'+'     '+start.format('DD/MM/YYYY')+'  To  '+end.format('DD/MM/YYYY'));
+
+        }
+        
+    
+        var daterangepickerOptions ={
+          startDate: start,
+          endDate: end,
+          ranges: {
+           
+             
+             'This Month': [moment().startOf('month'), moment().endOf('month')],
+             'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
+             'This Year': [moment().startOf('year'), moment().endOf('year')],
+             'Last Month': [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ],
+             
+          },
+          opens: 'left', // Adjust the direction of the calendar popup if needed
+          showCustomRangeLabel: true,
+          //singleDatePicker:true,
+          showDropdowns:true,
+          linkedCalenders:false,
+          showCancel:true,
+          cancelClass: 'cancel-button',
+          maxSpan:{days:30}
+  
+          
+  
+      };
+      $('#reportrange').daterangepicker(daterangepickerOptions, cb);
+  
+ 
+  
+      $('.custom-caret i').click(function() {
+          $('#reportrange').data('daterangepicker').toggle();
+      });
+      $('.cancel-button').click(function() {
+          $('#reportrange').data('daterangepicker').setStartDate(start);
+          $('#reportrange').data('daterangepicker').setEndDate(end);
+      });
+     
+     
+    
+  
+  
+      cb(start, end, 'Custom');
     });
-</script>
+    </script>
+  
 {%endblock%}

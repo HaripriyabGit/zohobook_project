@@ -2,8 +2,9 @@
 {% block content %}
 {% load static %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-
-  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style>
 
 table {
@@ -27,45 +28,55 @@ thead {
 #over:hover {
   background-color: rgba(110, 110, 110, 0.616);
 }
-#ui-datepicker-div{
-            width: 20rem;
-            left: 632px;
-        }
-        .ui-datepicker-calendar {
+/* Style for calendar input fields */
+.inputdate {
+  width: 150px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Style for calendar icon */
+.ui-datepicker-trigger {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Style for the datepicker dropdown */
+.ui-datepicker {
+  font-size: 14px;
+}
+
+/* Style for the datepicker header */
+.ui-datepicker-header {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+/* Style for the datepicker days */
+.ui-datepicker-calendar {
+  border: 1px solid #555;
+}
+
+/* Style for the selected date */
+.ui-datepicker-calendar .ui-datepicker-current-day {
+  background-color: #555;
+  color: #fff;
+}
+/* .ui-datepicker-calendar {
             display: none;
-        }
-        .datepicker{
-            margin-top: 1rem;
-            display: grid;
-            justify-items: center;
-        }
-        select > option{
-            background-color: rgb(202, 49, 49);
-        }
-        .ui-datepicker-prev{
-            background: rgb(80, 53, 53);
-            cursor: pointer;
-        }
-        .ui-datepicker-next{
-            background: rgb(255, 255, 255);
-            cursor: pointer;
-        }
-        .ui-datepicker .ui-datepicker-buttonpane button{
-            color: white;
-            background: black;
-        }
-        .ui-datepicker .ui-datepicker-buttonpane button:hover{
-            color: white;
-            background: rgb(234, 176, 0);
-        }
-        .monthYearPicker{
-            font-size: 1.5rem;
-            height: 2rem;
-            width: 20rem;
-        }
-        .monthYearPara{
-            color: rgb(15, 8, 8);
-        }
+        } */
+/* Style for the datepicker navigation buttons */
+.ui-datepicker-prev, .ui-datepicker-next {
+  background-color: #555;
+  color: #fff;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
+}
+
 </style>
 
 <br> 
@@ -73,15 +84,15 @@ thead {
  <nav class="nav nav-pills navbar-expand-lg navbar-light " id="navabars">
   <!-- Navbar brand or logo -->
   <a class="navbar-brand" href="#"></a>
-  <!-- <div class="datepicker">
-    <p class="monthYearPara"></p>
-    <input readonly name="myDate" class="monthYearPicker" placeholder=" Date Picker " />
-</div> -->
+
   <!-- Navbar content -->
  
+  <div id="selectedDateDisplay"><input id="fromInputDate" class="inputdate" type="text"  placeholder="From MM/YY" readonly></div>
+   &nbsp;      
+  <div id="datepicker"><input id="inputdate" class="inputdate" type="text" placeholder="To MM/YY" readonly></div>
          
 
-  <li class="nav-item " style="padding-left:1050px ;">
+  <li class="nav-item " style="padding-left:770px ;">
     <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
@@ -291,26 +302,21 @@ function updateTotals() {
 
 // Call the function to calculate and update totals when the page loads
 window.onload = updateTotals;
-</script>      
-<script>
-  $(function() {
-      $('.monthYearPicker').datepicker({
-          changeMonth: true,
-          changeYear: true,
-          showButtonPanel: true,
-          minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-          maxDate: new Date(2023, 3),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-          dateFormat: 'MM yy'
-      }).focus(function() {
-          var thisCalendar = $(this);
-          $('.ui-datepicker-calendar').detach();
-          $('.ui-datepicker-close').click(function() {
-              var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-              var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-              thisCalendar.datepicker('setDate', new Date(year, month, 1));
-          });
-      });
-  });
+</script> 
+<script>    
+$('.inputdate').datepicker( {
+  changeMonth: true,
+  changeYear: true,
+  showButtonPanel: true,
+  dateFormat: 'MM yy',
+  onClose: function(dateText, inst) { 
+      var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+      var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+     
+      $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+      $('.ui-datepicker-calendar').remove();
+  }
+});
 </script>
 
 {%endblock%}
