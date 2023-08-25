@@ -65,9 +65,9 @@ thead {
   background-color: #555;
   color: #fff;
 }
-/* .ui-datepicker-calendar {
+.ui-datepicker-calendar {
             display: none;
-        } */
+        }
 /* Style for the datepicker navigation buttons */
 .ui-datepicker-prev, .ui-datepicker-next {
   background-color: #555;
@@ -87,9 +87,9 @@ thead {
 
   <!-- Navbar content -->
  
-  <div id="selectedDateDisplay"><input id="fromInputDate" class="inputdate" type="text"  placeholder="From MM/YY" readonly></div>
+  <div id="datepicker"><input id="fromInputDate" class="inputdate" type=""  placeholder="From MM/YY" readonly></div>
    &nbsp;      
-  <div id="datepicker"><input id="inputdate" class="inputdate" type="text" placeholder="To MM/YY" readonly></div>
+  <div id="datepicker"><input id="toInputDate" class="inputdate" type="" placeholder="To MM/YY" readonly></div>
          
 
   <li class="nav-item " style="padding-left:770px ;">
@@ -167,7 +167,12 @@ thead {
 
                 <td class="table" id="value">{{i.total}}</td>
                 
-                <td class="table">  {%for p in purchases %} {{p.tax_percentage}}{%endfor%}</td>
+                <td class="table">  {%for p in purchases %}
+                  {% if p.purchase_bill_id == i.id %}
+
+                   {{p.tax_percentage}}
+                   {%endif%}
+                   {%endfor%}</td>
                 <td class="table">0</td>
                 <td class="table" id="taxablevalue">{{i.sub_total}}</td>
                 <td class="table">N</td>
@@ -304,17 +309,25 @@ function updateTotals() {
 window.onload = updateTotals;
 </script> 
 <script>    
-$('.inputdate').datepicker( {
+$('.inputdate').datepicker({
   changeMonth: true,
   changeYear: true,
   showButtonPanel: true,
   dateFormat: 'MM yy',
-  onClose: function(dateText, inst) { 
-      var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-      var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-     
-      $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
-      $('.ui-datepicker-calendar').remove();
+  beforeShow: function (input, inst) {
+    // Add this code to set the input field value when the datepicker is shown
+    var selectedDate = $(input).val();
+    if (selectedDate) {
+      var parts = selectedDate.split(" ");
+      $(this).datepicker("setDate", new Date(parts[1], $.inArray(parts[0], $(this).datepicker('option', 'monthNames')), 1));
+    }
+  },
+  onClose: function (dateText, inst) {
+    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+    $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+    $('.ui-datepicker-calendar').hide(); // Use hide() to hide the calendar
   }
 });
 </script>

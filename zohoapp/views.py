@@ -7516,8 +7516,9 @@ def sales_by_hsn_load(request):
      company = company_details.objects.get(user=request.user)
      item = AddItem.objects.all()
      invoices=invoice.objects.all()
+     invoice_items=invoice_item.objects.all()
      
-     return render(request,'sales_by_hsn.html',{'company':company,'items':item,'invoice':invoices})
+     return render(request,'sales_by_hsn.html',{'company':company,'items':item,'invoice':invoices,'invoice_item':invoice_items})
 
 
     

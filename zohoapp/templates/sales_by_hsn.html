@@ -313,80 +313,87 @@ td{
                         });
                     });
                 </script> -->
-              <script>
-              $(document).ready(function() {
-    $('.filter-button').on('click', function() {
-        $(this).closest('th').find('.filter-dropdown').toggle();
-    });
-
-    $('.apply-filter').on('click', function() {
-        const $table = $('#myTable');
-        const columnIndex = $(this).closest('th').index();
-        const filterOption = $(this).siblings('.filter-option').val();
-        const filterValue = $(this).siblings('.filter-value').val().trim();
-
-        $table.find('tbody tr').hide();  // Hide all rows
-
-        if (filterOption === 'exact-match') {
-            applyExactMatchFilter($table, columnIndex, filterValue);
-        } else if (filterOption === 'contains') {
-            applyContainsFilter($table, columnIndex, filterValue);
-        } else if (filterOption === 'equal-to') {
-            applyEqualToFilter($table, columnIndex, filterValue);
-        } else if (filterOption === 'greater-than') {
-            applyGreaterThanFilter($table, columnIndex, filterValue);
-        } else if (filterOption === 'less-than') {
-            applyLessThanFilter($table, columnIndex, filterValue);
-        }
-    });
-
-    $('.clear-filter').on('click', function() {
-        $('#myTable tbody tr').show();
-        $(this).siblings('.filter-option').val('contains');
-        $(this).siblings('.filter-value').val('');
-    });
-});
-
-function applyExactMatchFilter($table, columnIndex, filterValue) {
-    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
-        if ($(this).text().trim() === filterValue) {
-            $(this).parent().show();
-        }
-    });
-}
-
-function applyContainsFilter($table, columnIndex, filterValue) {
-    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
-        if ($(this).text().toLowerCase().includes(filterValue.toLowerCase())) {
-            $(this).parent().show();
-        }
-    });
-}
-
-function applyEqualToFilter($table, columnIndex, filterValue) {
-    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
-        if (parseFloat($(this).text().trim()) === parseFloat(filterValue)) {
-            $(this).parent().show();
-        }
-    });
-}
-
-function applyGreaterThanFilter($table, columnIndex, filterValue) {
-    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
-        if (parseFloat($(this).text().trim()) > parseFloat(filterValue)) {
-            $(this).parent().show();
-        }
-    });
-}
-
-function applyLessThanFilter($table, columnIndex, filterValue) {
-    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
-        if (parseFloat($(this).text().trim()) < parseFloat(filterValue)) {
-            $(this).parent().show();
-        }
-    });
-}
-</script>
+                <script>
+                  $(document).ready(function() {
+                    $('.filter-button').on('click', function() {
+                      $(this).closest('th').find('.filter-dropdown').toggle();
+                    });
+                
+                    $('.apply-filter').on('click', function() {
+                      const $table = $('#myTable');
+                      const columnIndex = $(this).closest('th').index();
+                      const filterOption = $(this).siblings('.filter-option').val();
+                      const filterValue = $(this).siblings('.filter-value').val().trim();
+                
+                      $table.find('tbody tr').hide();  // Hide all rows
+                
+                      if (filterOption === 'exact-match') {
+                        applyExactMatchFilter($table, columnIndex, filterValue);
+                      } else if (filterOption === 'contains') {
+                        applyContainsFilter($table, columnIndex, filterValue);
+                      } else if (filterOption === 'equal-to') {
+                        applyEqualToFilter($table, columnIndex, filterValue);
+                      } else if (filterOption === 'greater-than') {
+                        applyGreaterThanFilter($table, columnIndex, filterValue);
+                      } else if (filterOption === 'less-than') {
+                        applyLessThanFilter($table, columnIndex, filterValue);
+                      }
+                
+                      // Close the filter dropdown
+                      $(this).closest('.filter-dropdown').hide();
+                    });
+                
+                    $('.clear-filter').on('click', function() {
+                      $('#myTable tbody tr').show();
+                      $(this).siblings('.filter-option').val('contains');
+                      $(this).siblings('.filter-value').val('');
+                
+                      // Close the filter dropdown
+                      $(this).closest('.filter-dropdown').hide();
+                    });
+                  });
+                
+                  function applyExactMatchFilter($table, columnIndex, filterValue) {
+                    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+                      if ($(this).text().trim() === filterValue) {
+                        $(this).parent().show();
+                      }
+                    });
+                  }
+                
+                  function applyContainsFilter($table, columnIndex, filterValue) {
+                    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+                      if ($(this).text().toLowerCase().includes(filterValue.toLowerCase())) {
+                        $(this).parent().show();
+                      }
+                    });
+                  }
+                
+                  function applyEqualToFilter($table, columnIndex, filterValue) {
+                    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+                      if (parseFloat($(this).text().trim()) === parseFloat(filterValue)) {
+                        $(this).parent().show();
+                      }
+                    });
+                  }
+                
+                  function applyGreaterThanFilter($table, columnIndex, filterValue) {
+                    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+                      if (parseFloat($(this).text().trim()) > parseFloat(filterValue)) {
+                        $(this).parent().show();
+                      }
+                    });
+                  }
+                
+                  function applyLessThanFilter($table, columnIndex, filterValue) {
+                    $table.find(`tbody tr td:nth-child(${columnIndex + 1})`).each(function() {
+                      if (parseFloat($(this).text().trim()) < parseFloat(filterValue)) {
+                        $(this).parent().show();
+                      }
+                    });
+                  }
+                </script>
+               
 
  
  <script>
@@ -513,7 +520,7 @@ function applyLessThanFilter($table, columnIndex, filterValue) {
           showCustomRangeLabel: true,
           //singleDatePicker:true,
           showDropdowns:true,
-          linkedCalenders:false,
+          linkedCalenders:true,
           showCancel:true,
           cancelClass: 'cancel-button',
           maxSpan:{days:30}
