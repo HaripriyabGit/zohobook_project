@@ -2,9 +2,9 @@
 {% block content %}
 {% load static %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style>
 
 table {
@@ -47,6 +47,9 @@ thead {
 .ui-datepicker {
   font-size: 14px;
 }
+.hide-calendar .ui-datepicker-calendar {
+    display: none;
+  }
 
 /* Style for the datepicker header */
 .ui-datepicker-header {
@@ -65,9 +68,7 @@ thead {
   background-color: #555;
   color: #fff;
 }
-.ui-datepicker-calendar {
-            display: none;
-        }
+
 /* Style for the datepicker navigation buttons */
 .ui-datepicker-prev, .ui-datepicker-next {
   background-color: #555;
@@ -87,9 +88,9 @@ thead {
 
   <!-- Navbar content -->
  
-  <div id="datepicker"><input id="fromInputDate" class="inputdate" type=""  placeholder="From MM/YY" readonly></div>
+  <div id=""><input id="externalDateInput" class="inputdate" type="text"  placeholder="From MM/YY" readonly></div>
    &nbsp;      
-  <div id="datepicker"><input id="toInputDate" class="inputdate" type="" placeholder="To MM/YY" readonly></div>
+  <div id="datepicker"><input id="datepicker" class="inputdate" type="text" placeholder="To MM/YY" readonly></div>
          
 
   <li class="nav-item " style="padding-left:770px ;">
@@ -308,28 +309,31 @@ function updateTotals() {
 // Call the function to calculate and update totals when the page loads
 window.onload = updateTotals;
 </script> 
-<script>    
-$('.inputdate').datepicker({
-  changeMonth: true,
-  changeYear: true,
-  showButtonPanel: true,
-  dateFormat: 'MM yy',
-  beforeShow: function (input, inst) {
-    // Add this code to set the input field value when the datepicker is shown
-    var selectedDate = $(input).val();
-    if (selectedDate) {
-      var parts = selectedDate.split(" ");
-      $(this).datepicker("setDate", new Date(parts[1], $.inArray(parts[0], $(this).datepicker('option', 'monthNames')), 1));
+<script>
+  $('.inputdate').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'MM yy',
+    beforeShow: function (input, inst) {
+      // Hide the calendar
+      $('#ui-datepicker-div').addClass('hide-calendar');
+    },
+    onClose: function (dateText, inst) {
+      $('#ui-datepicker-div').removeClass('hide-calendar');
+      
+      var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+      var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+      var formattedDate = $.datepicker.formatDate('MM yy', new Date(year, month, 1));
+      
+      $(this).val(formattedDate);
+ 
+  
     }
-  },
-  onClose: function (dateText, inst) {
-    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-
-    $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
-    $('.ui-datepicker-calendar').hide(); // Use hide() to hide the calendar
-  }
-});
+  });
 </script>
 
-{%endblock%}
+
+
+
+{%endblock%}                               
