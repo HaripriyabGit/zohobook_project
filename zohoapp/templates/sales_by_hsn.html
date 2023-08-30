@@ -257,21 +257,26 @@ td{
                       </thead>
                       <tbody>
                        
-                        {%for i in items %}
+                        {% for i in invoice_item %}
                         <tr id="over" class="">
                
                        
-                          <td class="table" style="width:auto ;">{{i.id}}</td>
+                          <td class="table" style="width:auto ;">{{forloop.counter}}</td>
                           <td class="table" style="width: auto;">{{i.hsn}}</td>
                          
-                          <td class="table td-total-value" style="width:auto ;">{% for p in invoice %} {{p.grandtotal}}{%endfor%}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.subtotal}}{%endfor%}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.igst}}{%endfor%}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.cgst}}{%endfor%}</td>
-                          <td class="table" style="width:auto ;">{% for p in invoice %}{{p.sgst}}{%endfor%}</td>
+                          <td class="table td-total-value" style="width:auto ;">0</td>
+                          <td class="table" style="width:auto ;">
+                            {{i.total}}
+
+                           </td>
+                          <td class="table" style="width:auto ;">0
+                        </td>
+                       
                           <td class="table" style="width:auto ;">0</td>
-                          
-  
+                          <td class="table" style="width:auto ;">0</td>
+                         
+                         
+                          <td class="table" style="width:auto ;">0</td>
                         </tr>
                         {%endfor%}
                   
@@ -547,5 +552,7 @@ td{
       cb(start, end, 'Custom');
     });
     </script>
+
+    
   
 {%endblock%}

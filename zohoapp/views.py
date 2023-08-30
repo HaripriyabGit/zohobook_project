@@ -25,7 +25,8 @@ from django.template import Context, Template
 import tempfile
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-
+from django.db.models import Sum,F,ExpressionWrapper, DecimalField
+from django.db.models.functions import Coalesce
 
 def index(request):
 
@@ -7514,11 +7515,17 @@ def gstr2_load(request):
 
 def sales_by_hsn_load(request):
      company = company_details.objects.get(user=request.user)
-     item = AddItem.objects.all()
+    #  item = AddItem.objects.all()
      invoices=invoice.objects.all()
-     invoice_items=invoice_item.objects.all()
+     invoice_items = invoice_item.objects.values('hsn').annotate(
+    total=Sum('total'),
+    
+   
+  )
+    
      
-     return render(request,'sales_by_hsn.html',{'company':company,'items':item,'invoice':invoices,'invoice_item':invoice_items})
+    
+     return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item':invoice_items})
 
 
     
