@@ -7501,9 +7501,7 @@ def general(request):
     return render(request,'custom-valuation-report.html',{'company':company})
 
 
-def gst_reports_gst2(request):
-    company = company_details.objects.get(user=request.user)
-    return render(request,'gst_gstr2_reports.html',{'company':company})
+
 
 def gstr2_load(request):
     company = company_details.objects.get(user=request.user)
@@ -7519,12 +7517,23 @@ def sales_by_hsn_load(request):
      invoices=invoice.objects.all()
      invoice_items = invoice_item.objects.values('hsn').annotate(
     total=Sum('total'),
+     tax=Sum('tax'),
     
    
-  )
-    
-     
-    
+    )
+     for i in invoice_items:
+        total_tax = i['total']
+        igst_rate = i['tax']  # Replace with the actual IGST rate
+        
+        igst = total_tax * (igst_rate / 100)
+        cgst = igst_rate*(igst_rate / 2)
+        sgst = igst_rate*(igst_rate / 2)
+        
+        i['igst'] = igst
+        i['cgst'] = cgst
+        i['sgst'] = sgst
+         
+
      return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item':invoice_items})
 
 

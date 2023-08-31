@@ -344,7 +344,7 @@ urlpatterns = [
     path('customerAtoZ_bills',views.customerAtoZ_bills,name='customerAtoZ_bills'),
     path('vendorAtoZ_bills',views.vendorAtoZ_bills,name='vendorAtoZ_bills'),
 ##gst report####
-    path('gst_reports_gst2',views.gst_reports_gst2,name='gst_reports_gst2'),
+
     path('gstr2_load',views.gstr2_load,name='gstr2_load'),
     path('sales_by_hsn_load',views.sales_by_hsn_load,name="sales_by_hsn_load"),
   

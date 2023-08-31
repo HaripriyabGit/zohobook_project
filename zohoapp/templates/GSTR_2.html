@@ -1,4 +1,4 @@
-{% extends 'base3.html' %}
+{% extends 'base1.html' %}
 {% block content %}
 {% load static %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
@@ -8,26 +8,32 @@
 
 <style>
 
-table {
+.table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  color: #333;
+  color: white;
+  border-color: white;
 
 }
+#over td {
+  border-color: white;
+}
 
-th, td,tr {
+ th, td,tr {
   padding: 10px;
   text-align: center;
- border: 1px solid #333;
+ border: 1px solid white;
+ border-color: white;
 }
 
-thead {
+.table thead {
   color: #fff;
 }
 
 #over:hover {
   background-color: rgba(110, 110, 110, 0.616);
+
 }
 /* Style for calendar input fields */
 .inputdate {
@@ -77,7 +83,11 @@ thead {
   border: none;
   cursor: pointer;
 }
-
+#selectedFromDate,
+  #selectedToDate {
+    display: inline-block;
+    margin-right: 5px; /* Add space between the two h5 tags */
+  }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -94,7 +104,7 @@ thead {
   <div id="datepicker"><input id="inputdate1" class="inputdate1" type="text" placeholder="To "></div>
         
 
-  <li class="nav-item " style="padding-left:770px ;">
+  <li class="nav-item " style="padding-left:720px ;">
     <a class="nav-link "  href="#" role="button" aria-expanded="false" style="background: white; color: black;width: 5%;"  onclick="printPageContent()"><i class="fas fa-print"style="color:black;transform: translateX(-40%);"></i></a>
 
       
@@ -107,61 +117,77 @@ thead {
 
     
   </li>
+  
+  <li class="nav-item">
+    <input type="button" value="X" onclick="javascript:history.go(-1);" class="btn btn-tansperent" style="font-size: 20px;"> 
+
+   </li>
       </ul>
   </div>
 </nav>
-<div id="contentToExport">
- <div class="row " style="margin-top:3% ;" >
-     <div class="col-md-12 form-inline ">
-       <div class="row">
-         <div class="col-md-9"><a class=" text text-white" style="font-size: 1.5rem;white-space: nowrap;">GSTR2 REPORT</a>
-          </div>
+<div id="contentToExport"> 
+   <div  style="top: 7rem; " ><br><br>
+  <center>
+    <div class="row">
+      {% if company.company_name != None %}
+       <div  ><h4 class="text text-light" 
+        >{{company.company_name }}
+        {% else %}
+         Add Company</h4>
 
-       </div>
-   </div>
+        </div>
+        {% endif %}
+       <div ><a class="text text-light" style="font-size: 2rem; white-space: nowrap;color: white;"><h2>GSTR2 REPORT </h2></a></div>
+              <h5 class="text text-light" id="selectedFromDate"></h5>
+              <h5 class="text text-light" id="selectedToDate"></h5>
 
-   <div class="row" >
-    <div class="col">
-      <div class="table-resposive" style="overflow-x: auto ;border-radius: 10px;">
+        </div>
+    </div>   
+  </center>
+
+
+   <div class="row text-light" >
+    <div class="col text-light">
+      <div class="table-resposive " style="overflow-x: auto ;border-radius: 10px;  ">
         <table class="table  text-white" id="myTable" style="width: 100%;">
             <thead >
                 <tr class="table" >
                     
-                    <th class="table" colspan="5" style="text-align: center;">BILLS DETAILS</th>
-                    <th class="table" colspan="" style="text-align: center;">RATE</th>
-                    <th class="table" colspan="" style="text-align: center;">CESS RATE</th>
-                    <th class="table" colspan="" style="text-align: center;">TAXABLE VALUE</th>
-                    <th class="table" colspan="" style="text-align: center;">REVERSE CHARGE</th>
-                    <th class="table" colspan="4" style="text-align: center;">AMOUNT</th>
-                     <th class="table" colspan="" style="text-align: right;">PLACE OF SUPPLY(Name of State)</th>
+                    <th class="table text-primary" colspan="5" style="text-align: center;">BILLS DETAILS</th>
+                    <th class="table text-primary" colspan="" style="text-align: center;">RATE</th>
+                    <th class="table text-primary" colspan="" style="text-align: center;">CESS RATE</th>
+                    <th class="table text-primary" colspan="" style="text-align: center;">TAXABLE VALUE</th>
+                    <th class="table text-primary" colspan="" style="text-align: center;">REVERSE CHARGE</th>
+                    <th class="table text-primary" colspan="4" style="text-align: center;">AMOUNT</th>
+                     <th class="table text-primary" colspan="" style="text-align: right;">PLACE OF SUPPLY(Name of State)</th>
 
                      
               
                   
                 </tr>
-              <tr class="table" >
-                <th class="table">GSTIN/UIN</th>
-                <th class="table">Party Name</th>
-                <th class="table">No</th>
-                <th class="table">Date</th>
-                <th class="table" id>Value</th>
-                <th colspan="4"></th>
+              <tr class="table text-light" >
+                <th class="table text-primary" style="border-color: white;">GSTIN/UIN</th>
+                <th class="table text-primary" style="border-color: white;">Party Name</th>
+                <th class="table text-primary" style="border-color: white;">No</th>
+                <th class="table text-primary"style="border-color: white;">Date</th>
+                <th class="table text-primary" style="border-color: white;">Value</th>
+                <th colspan="4"style="border-color: white;"></th>
                
                
-                <th class="table"rowspan="">Integrated Tax</th>
-                <th class="table">Central Tax</th>
-                <th class="table">State/UT Tax</th>
-                <th class="table"style="text-align:left">Cess</th>
+                <th class="table text-primary"rowspan=""style="border-color: white;">Integrated Tax</th>
+                <th class="table text-primary"style="border-color: white;">Central Tax</th>
+                <th class="table text-primary"style="border-color: white;">State/UT Tax</th>
+                <th class="table text-primary"style="text-align:left;border-color: white;">Cess</th>
               </tr>
             </thead>
-            <tbody class="">
+            <tbody class=" text-light">
               {%for i in purchase %}
               
              
               <tr id="over">
               
                
-                <td class="table">{{i.vendor_gst_no}}</td>
+                <td class="table ">{{i.vendor_gst_no}}</td>
                 
                 <td class="table">{{i.vendor_name}}</td>
                 <td class="table">{{i.bill_no}}</td>
@@ -169,10 +195,10 @@ thead {
 
                 <td class="table" id="value">{{i.total}}</td>
                 
-                <td class="table">  {%for p in purchases %}
+                <td class="table rate-column">  {%for p in purchases %}
                   {% if p.purchase_bill_id == i.id %}
 
-                   {{p.tax_percentage}}
+                  <span class="rate-value">{{p.tax_percentage}}</span> 
                    {%endif%}
                    {%endfor%}</td>
                 <td class="table">0</td>
@@ -192,18 +218,18 @@ thead {
             {%endfor%}
             <tfoot>
               <tr>
-                <th>Total</th>
+                <th class="text-success">Total</th>
                 <th></th>
                 <th></th>
                 <th></th>
-                <th id="valueTotal"></th>
+                <th id="valueTotal" class="text-danger" ></th>
                 <th colspan="2"></th>
-                <th id="taxable"></th>
+                <th id="taxable"class="text-danger"></th>
                 <th colspan="1" ></th>
-                <th id="integratedTaxTotal"></th>
-                <th id="centralTaxTotal"></th>
-                <th id="stateTaxTotal"></th>
-                <th id="cessTotal"></th>
+                <th id="integratedTaxTotal"class="text-danger"></th>
+                <th id="centralTaxTotal"class="text-danger"></th>
+                <th id="stateTaxTotal"class="text-danger"></th>
+                <th id="cessTotal" class="text-danger"></th>
                 <th></th>
               </tr>
             </tfoot>
@@ -223,12 +249,23 @@ thead {
 
 
 
-
+</div>
  </div>
 </div>
  
 
 </div>
+<script>
+  $(document).ready(function() {
+    $('.rate-column').each(function() {
+      var rates = [];
+      $(this).find('.rate-value').each(function() {
+        rates.push($(this).text());
+      });
+      $(this).text(rates.join(', '));
+    });
+  });
+  </script>
 <script>
   function printPageContent() {
     const contentToPrint = document.getElementById('contentToExport');
@@ -315,29 +352,22 @@ window.onload = updateTotals;
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'dd/MM/ yy',
-            onClose: function(dateText, inst) { 
-                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                $(this).datepicker('setDate', new Date(year, month, 1));
-            }
+            dateFormat: 'dd MM yy',
+            onSelect: function(dateText, inst) {
+      $('#selectedFromDate').text('From'+'  ' + dateText);
+    }
         });
-
-</script>
-<script>
-  $('.inputdate1').datepicker( {
+        $('.inputdate1').datepicker( {
              changeMonth: true,
              changeYear: true,
              showButtonPanel: true,
-             dateFormat: 'dd/MM/ yy',
-             onClose: function(dateText, inst) { 
-                 var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                 $(this).datepicker('setDate', new Date(year, month, 1));
-             }
+             dateFormat: 'dd MM yy',
+             onSelect: function(dateText, inst) {
+      $('#selectedToDate').text('To'+'  ' + dateText);
+    }
          });
- 
- </script>
+</script>
+
 
 
 
