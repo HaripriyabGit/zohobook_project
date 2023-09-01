@@ -47,18 +47,19 @@
         background-color: #f44336;
         color: white;
     }
-    table {
+    .table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  color: #333;
+  color:white;
+  border-color: white;
 
 }
 
 th, td,tr {
   padding: 10px;
   text-align: center;
- border: 1px solid #333;
+ border: 1px solid white;
 }
 
 thead {
@@ -208,8 +209,8 @@ td{
                       <thead class="">
                         
                         <tr class="">
-                            <th class="">#</th>
-                          <th class="table" >HSN<i class="fas fa-filter filter-button" style="color: red;"></i>
+                            <th class="text-primary" style="border-color: white;">#</th>
+                          <th class="table text-primary"style="border-color: white;" >HSN<i class="fas fa-filter filter-button" style="color: red;"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="contains">Contains</option>
@@ -221,7 +222,7 @@ td{
                             </div>
                             
                         </th>
-                          <th class="table ">TOTAL VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">TOTAL VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -237,7 +238,7 @@ td{
                             </div>
                         
                         </th>
-                          <th class="table">TAXABLE VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">TAXABLE VALUE <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -253,7 +254,7 @@ td{
                             </div>
                         </th>
                           
-                          <th class="table">IGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">IGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -268,7 +269,7 @@ td{
                                 
                             </div>
                         </th>
-                          <th class="table">CGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">CGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -283,7 +284,7 @@ td{
                                 
                             </div>
                         </th>
-                          <th class="table">SGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">SGST AMOUNT <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -298,7 +299,7 @@ td{
                                 
                             </div>
                         </th>
-                          <th class="table">ADD.CESS <i class="fas fa-filter filter-button"style="color:red"></i>
+                          <th class="table text-primary"style="border-color: white;">ADD.CESS <i class="fas fa-filter filter-button"style="color:red"></i>
                             <div class="filter-dropdown">
                                 <select class="filter-option">
                                     <option value="equal-to">Equal to</option>
@@ -334,11 +335,11 @@ td{
 
                            </td>
                           
-                          <td class="table" style="width:auto ;">{{i.igst|floatformat:2}}
+                          <td class="table IGST" style="width:auto ;">{{i.igst|floatformat:2}}
                         </td>
                        
-                          <td class="table" style="width:auto ;">{{i.cgst|floatformat:2}}</td>
-                          <td class="table" style="width:auto ;">{{i.sgst|floatformat:2}}</td>
+                          <td class="table CGST" style="width:auto ;">{{i.cgst|floatformat:2}}</td>
+                          <td class="table SGST" style="width:auto ;">{{i.sgst|floatformat:2}}</td>
                          
                          
                           <td class="table" style="width:auto ;">0</td>

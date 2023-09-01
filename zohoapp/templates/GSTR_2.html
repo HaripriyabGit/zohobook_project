@@ -1,4 +1,4 @@
-{% extends 'base1.html' %}
+{% extends 'base3.html' %}
 {% block content %}
 {% load static %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
@@ -186,7 +186,6 @@
              
               <tr id="over">
               
-               
                 <td class="table ">{{i.vendor_gst_no}}</td>
                 
                 <td class="table">{{i.vendor_name}}</td>
@@ -213,9 +212,47 @@
 
                
               </tr>
+              {%endfor%}  
+              {%for r in recur_bills %}
+              
+
+             
+              <tr id="over">
+              
+               
           
+             
+                <td class="table ">{{v.gst_number}}</td>
+               
+                
+                <td class="table">{{r.vendor_name}}</td>
+                <td class="table">null</td>
+                <td class="table">{{r.start_date}}</td>
+
+                <td class="table" id="value">{{r.grand_total}}</td>
+                
+                <td class="table rate-column">  {%for p in recur_add_bills %}
+                  {% if p.recur_bills_id == r.id %}
+
+                  <span class="rate-value">{{p.tax|floatformat:0}}</span> 
+                   {%endif%}
+                   {%endfor%}</td>
+                <td class="table">0</td>
+                <td class="table" id="taxablevalue">{{r.sub_total}}</td>
+                <td class="table">N</td>
+                <td class="table" id="integratedTax">{{r.igst}}</td>
+                <td class="table" id="centralTax">{{r.cgst}}</td>
+                <td class="table" id="stateTax">{{r.sgst}}</td>
+                <td class="table"id="cess">0</td>
+                <td class="table">{{r.source_supply}}</td>
+
+
+               
+              </tr>
+              
+              {%endfor%}    
             </tbody>
-            {%endfor%}
+            
             <tfoot>
               <tr>
                 <th class="text-success">Total</th>
@@ -257,14 +294,17 @@
 </div>
 <script>
   $(document).ready(function() {
-    $('.rate-column').each(function() {
-      var rates = [];
-      $(this).find('.rate-value').each(function() {
-        rates.push($(this).text());
-      });
-      $(this).text(rates.join(', '));
+  $('.rate-column').each(function() {
+    var rates = [];
+    $(this).find('.rate-value').each(function() {
+      var rate = $(this).text().trim();
+      if (rates.indexOf(rate) === -1) {
+        rates.push(rate);
+      }
     });
+    $(this).text(rates.join(', '));
   });
+});
   </script>
 <script>
   function printPageContent() {

@@ -27,7 +27,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from django.db.models import Sum,F,ExpressionWrapper, DecimalField
 from django.db.models.functions import Coalesce
-
+from itertools import groupby
 def index(request):
 
     return render(request,'landpage.html')
@@ -7507,7 +7507,12 @@ def gstr2_load(request):
     company = company_details.objects.get(user=request.user)
     purchase= PurchaseBills.objects.all()
     purchaseItem=PurchaseBillItems.objects.all()
-    context={'company':company,'purchase':purchase,'purchases':purchaseItem}
+    recur_bills=recurring_bills.objects.all()
+
+    recur_add_bills=recurring_bills_items.objects.all()
+    vendor = vendor_table.objects.filter(user = request.user)
+   
+    context={'company':company,'purchase':purchase,'purchases':purchaseItem,'recur_bills':recur_bills,'recur_add_bills':recur_add_bills,'vendor':vendor}
     return render(request,'GSTR_2.html',context)
 
 
@@ -7517,24 +7522,32 @@ def sales_by_hsn_load(request):
      invoices=invoice.objects.all()
      invoice_items = invoice_item.objects.values('hsn').annotate(
     total=Sum('total'),
-     tax=Sum('tax'),
+     tax=Sum('tax')
     
    
     )
+     grouped_items = {}
      for i in invoice_items:
-        total_tax = i['total']
-        igst_rate = i['tax']  # Replace with the actual IGST rate
-        
-        igst = total_tax * (igst_rate / 100)
-        cgst = igst_rate*(igst_rate / 2)
-        sgst = igst_rate*(igst_rate / 2)
-        
-        i['igst'] = igst
-        i['cgst'] = cgst
-        i['sgst'] = sgst
-         
+        hsn = i['hsn']
+        if hsn not in grouped_items:
+            grouped_items[hsn] = {
+                'hsn': hsn,
+                'total': 0,
+                'tax': 0,
+                'igst': 0,
+                'cgst': 0,
+                'sgst': 0
+            }
+        grouped_items[hsn]['total'] += i['total']
+        grouped_items[hsn]['tax'] += i['tax']
+        for hsn, i in grouped_items.items():
+            igst_rate = i['tax']  # Replace with the actual IGST rate
 
-     return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item':invoice_items})
+            i['igst'] = i['total'] * (igst_rate / 100)
+            i['cgst'] = igst_rate * (igst_rate / 2)
+            i['sgst'] = igst_rate * (igst_rate / 2)
+
+     return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item': grouped_items.values()})
 
 
     
