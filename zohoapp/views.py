@@ -25,8 +25,8 @@ from django.template import Context, Template
 import tempfile
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-from django.db.models import Sum,F,ExpressionWrapper, DecimalField
-from django.db.models.functions import Coalesce
+from django.db.models import Sum
+
 from itertools import groupby
 def index(request):
 
@@ -4119,6 +4119,7 @@ def create_recurring_bills(request):
         vname  = request.POST.get('vendor')
         cname = request.POST.get('customer')
         # cname = " ".join(cname)
+        v_gst_no=request.POST.get('gstin_inp') # haripriya add
         src_supply = request.POST.get('srcofsupply')
         prof = request.POST['prof_name']
         repeat = request.POST['repeat']
@@ -4146,7 +4147,7 @@ def create_recurring_bills(request):
 
         u = User.objects.get(id = request.user.id)
 
-        bills = recurring_bills(vendor_name=vname,profile_name=prof,customer_name = cname,
+        bills = recurring_bills(vendor_name=vname,profile_name=prof,customer_name = cname,vendor_gst_number=v_gst_no,
                     source_supply=src_supply,repeat_every = repeat,start_date = start,end_date = end,
                     payment_terms =pay_term,sub_total=sub_total,sgst=sgst,cgst=cgst,igst=igst,
                     tax_amount=tax1, shipping_charge = shipping_charge,
@@ -7508,11 +7509,10 @@ def gstr2_load(request):
     purchase= PurchaseBills.objects.all()
     purchaseItem=PurchaseBillItems.objects.all()
     recur_bills=recurring_bills.objects.all()
-
     recur_add_bills=recurring_bills_items.objects.all()
-    vendor = vendor_table.objects.filter(user = request.user)
+  
    
-    context={'company':company,'purchase':purchase,'purchases':purchaseItem,'recur_bills':recur_bills,'recur_add_bills':recur_add_bills,'vendor':vendor}
+    context={'company':company,'purchase':purchase,'purchases':purchaseItem,'recur_bills':recur_bills,'recur_add_bills':recur_add_bills}
     return render(request,'GSTR_2.html',context)
 
 

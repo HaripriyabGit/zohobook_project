@@ -482,6 +482,7 @@ class recurring_bills(models.Model):
     profile_name = models.CharField(max_length=100,null=True,blank=True)
     source_supply = models.CharField(max_length=100,null=True,blank=True)
     vendor_name = models.CharField(max_length=100,null=True,blank=True)
+    vendor_gst_number = models.CharField(max_length=100,null=True,blank=True)
     customer_name = models.CharField(max_length=100,null=True,blank=True)
     repeat_every = models.CharField(max_length=100,null=True,blank=True)
     start_date=models.DateField(null=True,blank=True)

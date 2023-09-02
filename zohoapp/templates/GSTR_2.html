@@ -219,12 +219,13 @@
              
               <tr id="over">
               
-               
-          
+       
              
-                <td class="table ">{{v.gst_number}}</td>
+                <td class="table ">{{r.vendor_gst_number}}</td>
                
-                
+               
+               
+         
                 <td class="table">{{r.vendor_name}}</td>
                 <td class="table">null</td>
                 <td class="table">{{r.start_date}}</td>
@@ -240,7 +241,7 @@
                 <td class="table">0</td>
                 <td class="table" id="taxablevalue">{{r.sub_total}}</td>
                 <td class="table">N</td>
-                <td class="table" id="integratedTax">{{r.igst}}</td>
+                <td class="table" id="integratedTax">{{r.igst|floatformat:1}}</td>
                 <td class="table" id="centralTax">{{r.cgst}}</td>
                 <td class="table" id="stateTax">{{r.sgst}}</td>
                 <td class="table"id="cess">0</td>
