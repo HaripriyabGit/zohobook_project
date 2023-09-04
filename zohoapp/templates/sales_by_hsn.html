@@ -334,14 +334,23 @@ td{
                             {{i.total}}
 
                            </td>
+                          {% if i.inv.igst != 0 %}
                           
-                          <td class="table IGST" style="width:auto ;">{{i.igst|floatformat:2}}
-                        </td>
-                       
+                          <td class="table IGST" style="width:auto ;">{{i.igst|floatformat:2}}</td>
+                            {%else%}
+                            <td class="table IGST" style="width:auto ;">0
+                          </td>
+                         {%endif%}
+                         {% if i.inv.cgst != 0 %}
                           <td class="table CGST" style="width:auto ;">{{i.cgst|floatformat:2}}</td>
+                          {%else%}
+                          <td class="table CGST" style="width:auto ;">0</td>
+                          {%endif%}
+                          {% if i.inv.sgst != 0 %}
                           <td class="table SGST" style="width:auto ;">{{i.sgst|floatformat:2}}</td>
-                         
-                         
+                         {%else%}
+                         <td class="table SGST" style="width:auto ;">0</td>
+                         {%endif%}
                           <td class="table" style="width:auto ;">0</td>
                         </tr>
                         {%endfor%}
