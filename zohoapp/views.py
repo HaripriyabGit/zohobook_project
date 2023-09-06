@@ -7520,34 +7520,9 @@ def sales_by_hsn_load(request):
      company = company_details.objects.get(user=request.user)
     #  item = AddItem.objects.all()
      invoices=invoice.objects.all()
-     invoice_items = invoice_item.objects.values('hsn').annotate(
-    total=Sum('total'),
-     tax=Sum('tax')
-    
-   
-    )
-     grouped_items = {}
-     for i in invoice_items:
-        hsn = i['hsn']
-        if hsn not in grouped_items:
-            grouped_items[hsn] = {
-                'hsn': hsn,
-                'total': 0,
-                'tax': 0,
-                'igst': 0,
-                'cgst': 0,
-                'sgst': 0
-            }
-        grouped_items[hsn]['total'] += i['total']
-        grouped_items[hsn]['tax'] += i['tax']
-        for hsn, i in grouped_items.items():
-            igst_rate = i['tax']  # Replace with the actual IGST rate
-
-            i['igst'] = i['total'] * (igst_rate / 100)
-            i['cgst'] = igst_rate * (igst_rate / 2)
-            i['sgst'] = igst_rate * (igst_rate / 2)
-
-     return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item': grouped_items.values()})
+     invoice_items = invoice_item.objects.all()
+ 
+     return render(request,'sales_by_hsn.html',{'company':company,'invoice':invoices,'invoice_item':invoice_items})
 
 
     

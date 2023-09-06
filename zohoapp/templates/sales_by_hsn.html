@@ -326,35 +326,31 @@ td{
                         <tr id="over" class="">
                
                        
-                          <td class="table" style="width:auto ;">{{forloop.counter}}</td>
-                          <td class="table" style="width: auto;">{{i.hsn}}</td>
+                          <td class="table" style="width:auto ;"></td>
+                          <td class="table hsn-cell" style="width: auto;">{{i.hsn}}</td>
                          
-                          <td class="table td-total-value" style="width:auto ;">0</td>
-                          <td class="table" style="width:auto ;">
+                          <td class="table td-total-value taxable-value-cell" style="width:auto ;">{{0}}</td>
+                          <td class="table total-value-cell" style="width:auto ;">
                             {{i.total}}
 
                            </td>
-                          {% if i.inv.igst != 0 %}
+                          {% for invo in invoice %}
+                          {% if invo.id == i.inv_id %}
                           
-                          <td class="table IGST" style="width:auto ;">{{i.igst|floatformat:2}}</td>
-                            {%else%}
-                            <td class="table IGST" style="width:auto ;">0
-                          </td>
-                         {%endif%}
-                         {% if i.inv.cgst != 0 %}
-                          <td class="table CGST" style="width:auto ;">{{i.cgst|floatformat:2}}</td>
-                          {%else%}
-                          <td class="table CGST" style="width:auto ;">0</td>
+                          <td class="table igst-cell" style="width:auto ;">{{invo.igst|floatformat:2}}</td>
+                          
+                      
+                     
+                          <td class="table cgst-cell" style="width:auto ;">{{invo.cgst|floatformat:2}}</td>
+                       
+                          <td class="table sgst-cell" style="width:auto ;">{{invo.sgst|floatformat:2}}</td>
                           {%endif%}
-                          {% if i.inv.sgst != 0 %}
-                          <td class="table SGST" style="width:auto ;">{{i.sgst|floatformat:2}}</td>
-                         {%else%}
-                         <td class="table SGST" style="width:auto ;">0</td>
-                         {%endif%}
-                          <td class="table" style="width:auto ;">0</td>
+                          {%endfor%}
+                         
+                          <td class="table cess-cell">{{0}}</td>
                         </tr>
+                       
                         {%endfor%}
-                  
               
                    
                       </tbody>
@@ -363,36 +359,9 @@ td{
                   <footer>
                     <label style="text-align: left;margin-top: 60px;"> Total Value: <span id="footer-total-sum" class="text text-success">0.00</span></label>&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label style="text-align: right;margin-top: 60px; padding-left:75% ;"  >Total Item: <span id="total-item-count">0</span></label>
+                    <label style="text-align: right;margin-top: 60px; padding-left:75% ;"  >Total Item: <span id="total-item-count"></span></label>
                 </footer>
                 
-
-                  
-               
-                <!-- <script>
-                    $(document).ready(function() {
-                        $('.filter-button').on('click', function() {
-                            // Toggle filter dropdown visibility
-                            $(this).closest('th').find('.filter-dropdown').toggle();
-                        });
-                        $('.apply-filter').on('click', function() {
-                            const $table = $('#myTable');
-                            const columnIndex = $(this).closest('th').index();
-                            const filterValue = $(this).siblings('.filter-value').val().trim();
-                
-                            $table.find('tbody tr').hide();  // Hide all rows
-                
-                            $table.find(`tbody tr td:nth-child(${columnIndex + 1}):contains('${filterValue}')`).parent().show();
-                            $table.find(`tbody tr td:nth-child(${columnIndex + 1}):not(:contains('${filterValue}'))`).parent().hide();
-                        });
-                
-                        $('.clear-filter').on('click', function() {
-                            $('#myTable tbody tr').show();
-                            $(this).siblings('.filter-option').val('contains');
-                            $(this).siblings('.filter-value').val('');
-                        });
-                    });
-                </script> -->
                 <script>
                   $(document).ready(function() {
                     $('.filter-button').on('click', function() {
@@ -508,20 +477,22 @@ td{
     }
   </script>
 <script>
-    // ... your existing JavaScript code ...
+  // Update the total item count based on the number of unique HSN values
+  function updateTotalItemCount() {
+      const uniqueHSNs = new Set();
+      $('#myTable tbody tr').each(function() {
+          const hsn = $(this).find('td:nth-child(2)').text(); // Assuming HSN is in the 2nd column
+          uniqueHSNs.add(hsn);
+      });
+      $('#total-item-count').text(uniqueHSNs.size);
+  }
 
-    // Update the total item count in the page footer
-    function updateTotalItemCount() {
-        const itemCount = $('#myTable tbody tr').length;
-        $('#total-item-count').text(itemCount);
-    }
-
-    // Call the function initially
-    updateTotalItemCount();
+  // Call the function initially
+  updateTotalItemCount();
 </script>
 <!-- ... your existing HTML code ... -->
 
-<script>
+<!-- <script>
     $(document).ready(function() {
         // ... your existing JavaScript code ...
 
@@ -544,7 +515,7 @@ td{
         
         // ... your existing JavaScript code ...
     });
-</script>
+</script> -->
 <script>
     function exportAsExcel() {
       const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
@@ -588,7 +559,67 @@ td{
      }
           });
  </script>
+<script>
+  $(document).ready(function() {
+      const hsnGroups = {};
 
-    
+      $('#myTable tbody tr').each(function() {
+          const hsn = $(this).find('td:nth-child(2)').text();
+          if (!hsnGroups[hsn]) {
+              hsnGroups[hsn] = [];
+          }
+          hsnGroups[hsn].push($(this));
+      });
+
+      $('#myTable tbody tr').remove();
+
+      let idCounter = 1; // Initialize the ID counter
+
+      for (const hsn in hsnGroups) {
+          if (hsnGroups.hasOwnProperty(hsn)) {
+              const group = hsnGroups[hsn];
+              let totalTaxableValue = 0;
+              let totalTotalValue = 0;
+              let totalIGST = 0;
+              let totalCGST = 0;
+              let totalSGST = 0;
+
+              group.forEach(function(row) {
+                  totalTaxableValue += parseFloat(row.find('.taxable-value-cell').text());
+                  totalTotalValue += parseFloat(row.find('.total-value-cell').text());
+                  totalIGST += parseFloat(row.find('.igst-cell').text());
+                  totalCGST += parseFloat(row.find('.cgst-cell').text());
+                  totalSGST += parseFloat(row.find('.sgst-cell').text());
+
+                  // Set the ID and increment the counter
+                  row.find('td:first').text(idCounter);
+                  idCounter++;
+              });
+
+              const newRow = `<tr>
+                  <td>${group[0].find('td:nth-child(1)').text()}</td>
+                  <td>${hsn}</td>
+                  <td>${totalTaxableValue.toFixed(2)}</td>
+                  <td>${totalTotalValue.toFixed(2)}</td>
+                  <td>${totalIGST.toFixed(2)}</td>
+                  <td>${totalCGST.toFixed(2)}</td>
+                  <td>${totalSGST.toFixed(2)}</td>
+                  <td>0</td>
+              </tr>`;
+              $('#myTable tbody').append(newRow);
+          }
+      }
+  });
+</script>
+<script>
+  $(document).ready(function() {
+      const rowCount = $('#myTable tbody tr').length;
+      
+      // Set IDs for each row based on the number of rows
+      $('#myTable tbody tr').each(function(index) {
+          $(this).find('td:first').text(index + 1);
+      });
+  });
+</script>
   
 {%endblock%}
